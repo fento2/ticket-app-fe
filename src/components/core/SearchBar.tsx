@@ -11,14 +11,14 @@ const SearchBar = () => {
           <Input
             type="text"
             placeholder="Cari event..."
-            className="pr-12 focus-visible:ring-0 focus-visible:ring-offset-0 focus:bg-white focus:text-black placeholder:text-gray-300 bg-emerald-600/60"
+            className="pr-12 focus-visible:ring-0 focus-visible:ring-offset-0 focus:bg-white focus:text-black placeholder:text-gray-300 bg-accent"
           />
           <Button
             type="button"
             variant={"default"}
             size="icon"
             className="absolute right-0 top-1/2 -translate-y-1/2
-              rounded-l-none bg-emerald-800 hover:bg-emerald-800 px-5 rounded-r-sm"
+              rounded-l-none px-5 rounded-r-sm bg-blue-900"
           >
             <Search size={18} className="text-white" />
           </Button>

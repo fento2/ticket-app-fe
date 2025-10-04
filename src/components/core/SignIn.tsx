@@ -32,7 +32,8 @@ export default function SignInModal() {
       </DialogTrigger>
 
       {/* Modal */}
-      <DialogContent className="max-w-md">
+      <DialogContent className="lg:!max-w-md !max-w-xs">
+
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-center">
             Sign In
@@ -42,44 +43,44 @@ export default function SignInModal() {
           </p>
         </DialogHeader>
 
-        <form className="grid gap-5">
+        <form className="grid gap-4">
           {/* Email */}
           <div className="relative">
-            <Label htmlFor="email" className="text-lg font-medium">
+            <Label htmlFor="email" className="text-md font-medium">
               Email
             </Label>
             <Input
               type="email"
               id="email"
               placeholder="you@example.com"
-              className="!h-14 !text-lg pr-12"
+              className="pr-10"
             />
-            <MailIcon className="absolute top-11 right-3 w-6 h-6 text-muted-foreground" />
+            <MailIcon className="absolute top-7.5 right-3 text-muted-foreground" />
           </div>
 
           {/* Password */}
           <div className="relative">
-            <Label htmlFor="password" className="text-lg font-medium">
+            <Label htmlFor="password" className="text-md font-medium">
               Password
             </Label>
             <Input
               type={showPassword ? "text" : "password"}
               id="password"
               placeholder="**********"
-              className="!h-14 !text-lg pr-12"
+              className="pr-10"
             />
             {showPassword ? (
               <Eye
-                className="absolute top-11 right-3 w-6 h-6 text-muted-foreground cursor-pointer"
+                className="absolute top-7.5 right-3 text-muted-foreground cursor-pointer"
                 onClick={() => setShowPassword(false)}
               />
             ) : (
               <EyeOff
-                className="absolute top-11 right-3 w-6 h-6 text-muted-foreground cursor-pointer"
+                className="absolute top-7.5 right-3 text-muted-foreground cursor-pointer"
                 onClick={() => setShowPassword(true)}
               />
             )}
-            <p className="mt-1 text-sm text-right text-blue-600 hover:underline cursor-pointer">
+            <p className="mt-1 text-xs text-right text-blue-600 hover:underline cursor-pointer">
               Forgot Password?
             </p>
           </div>
@@ -88,21 +89,21 @@ export default function SignInModal() {
           <div className="flex items-center space-x-2">
             <Checkbox
               id="rememberMe"
-              className="border border-black scale-110"
+              className="border border-black scale-100"
             />
-            <Label htmlFor="rememberMe" className="cursor-pointer text-lg">
+            <Label htmlFor="rememberMe" className="cursor-pointer text-md">
               Remember Me
             </Label>
           </div>
 
           {/* Sign In Button */}
-          <Button className="w-full !h-14 text-lg" type="button">
+          <Button className="w-full" type="button">
             Sign In
           </Button>
 
           {/* Link ke Sign Up */}
           <p className="text-base text-center">
-            Don't have an account?{" "}
+            Don&apos;t have an account?{" "}
             <Link
               href="/sign-up"
               className="text-blue-600 hover:underline cursor-pointer"
@@ -112,6 +113,7 @@ export default function SignInModal() {
             </Link>
           </p>
         </form>
+
       </DialogContent>
     </Dialog>
   );

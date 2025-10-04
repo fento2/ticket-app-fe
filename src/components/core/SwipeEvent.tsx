@@ -32,7 +32,7 @@ const SwipeEvent = (props: SwipeEventProps) => {
         modules={[Navigation, Pagination, Autoplay]}
         spaceBetween={1}
         slidesPerView={1}
-        pagination={{ clickable: true }}
+        pagination={{ clickable: true, dynamicBullets: true }}
         autoplay={{ delay: 5000 }}
         loop={true}
         navigation={{
