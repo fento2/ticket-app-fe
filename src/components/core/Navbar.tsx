@@ -14,7 +14,7 @@ export const Topbar = () => {
   ];
 
   return (
-    <div className="bg-sidebar-primary text-sm h-8 flex items-center border-b">
+    <div className="bg-sidebar-primary/90 text-sm h-8 flex items-center">
       <div className="max-w-screen-3xl mx-auto px-6 w-full flex justify-end">
         <div className="flex items-center gap-6 font-medium text-white">
           {menu.map((item, index) => (

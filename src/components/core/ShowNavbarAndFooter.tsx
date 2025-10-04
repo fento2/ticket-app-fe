@@ -11,7 +11,7 @@ const ShowNavbarAndFooter = ({ children }: ShowNavbarAndFooterProps) => {
     const pathname = usePathname()
     const hideOn = ["/sign-up"]
     const shouldHide = hideOn.some((v) => pathname.startsWith(v))
-    if (shouldHide) return null
+    if (shouldHide) return children
     return (
         <>
             <Topbar />
