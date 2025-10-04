@@ -95,22 +95,22 @@ const EventSlider = (props: ICategoryProps) => {
       nextBtn.setAttribute("tabindex", "0");
       prevBtn.setAttribute("tabindex", "0");
     }
-  }, []);
+  }, [navigation]);
 
   return (
     <div className="w-full relative group space-y-4">
       {/* Header Section */}
       <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold tracking-wide text-emerald-700 relative inline-block">
+        <h2 className="text-2xl font-bold tracking-wide relative inline-block">
           {props.title}
           {/* Underline accent */}
-          <span className="absolute -bottom-1 left-0 w-full h-1 bg-emerald-500 rounded"></span>
+          <span className="absolute -bottom-1 left-0 w-full h-1 bg-primary-foreground rounded"></span>
         </h2>
 
         {/* Action Button */}
         <Button
           variant="ghost"
-          className="text-emerald-600 hover:text-emerald-800 font-medium"
+          className="font-medium"
         >
           Lihat Semua
         </Button>
@@ -120,8 +120,12 @@ const EventSlider = (props: ICategoryProps) => {
       <Swiper
         modules={[Navigation, Pagination, Autoplay]}
         spaceBetween={24}
-        slidesPerView={4}
-        loop
+        breakpoints={{
+          320: { slidesPerView: 1.2 },   // hp kecil
+          480: { slidesPerView: 2.2 },     // hp besar
+          768: { slidesPerView: 3.3 },     // tablet
+          1024: { slidesPerView: 4.5 },    // desktop
+        }}
         navigation={{
           nextEl: `.event-slider-next-${navigation}`,
           prevEl: `.event-slider-prev-${navigation}`,

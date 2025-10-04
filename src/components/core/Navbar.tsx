@@ -1,15 +1,11 @@
-"use client";
-
-import { Ticket, Search } from "lucide-react";
-import { usePathname } from "next/navigation";
+import { Ticket } from "lucide-react";
 import Link from "next/link";
 
 import SignInModal from "./SignIn";
 import { Button } from "../ui/button";
-import { Input } from "../ui/input";
 import SearchBar from "./SearchBar";
 
-const Topbar = () => {
+export const Topbar = () => {
   const menu = [
     { name: "Features", link: "/feature" },
     { name: "Explore", link: "/explore" },
@@ -18,14 +14,14 @@ const Topbar = () => {
   ];
 
   return (
-    <div className="bg-emerald-800 text-white text-sm h-8 flex items-center">
+    <div className="bg-sidebar-primary text-sm h-8 flex items-center border-b">
       <div className="max-w-screen-3xl mx-auto px-6 w-full flex justify-end">
-        <div className="flex items-center gap-6 font-medium">
+        <div className="flex items-center gap-6 font-medium text-white">
           {menu.map((item, index) => (
             <Link
               key={index}
               href={item.link}
-              className="hover:text-gray-300 transition-colors"
+              className="transition-colors"
             >
               {item.name}
             </Link>
@@ -36,22 +32,22 @@ const Topbar = () => {
   );
 };
 
-const Navbar = () => {
+export const Navbar = () => {
   return (
-    <nav className="bg-emerald-700 w-full h-20 flex items-center shadow-md sticky top-0 z-50">
+    <nav className="bg-sidebar-primary w-full h-20 flex items-center shadow-md sticky top-0 z-50 border-b">
       <div className="max-w-screen-3xl mx-auto px-6 w-full flex items-center justify-between">
         {/* Logo + Search Bar container */}
         <div className="flex items-center gap-3 flex-1">
           {/* Logo */}
-          <div className="flex items-center space-x-2">
-            <Ticket className="w-7 h-7 text-white" />
-            <span className="text-white font-extrabold text-2xl tracking-wide">
+          <div className="flex items-center space-x-2 text-white">
+            <Ticket className="w-7 h-7" />
+            <span className="font-extrabold text-2xl tracking-wide">
               EventTix
             </span>
           </div>
 
           {/* Divider */}
-          <div className="bg-white/40 w-px h-6 mx-2" />
+          <div className="bg-accent w-px h-12 mx-2" />
           <div className="flex-1 mr-8 max-w-3xl">
             <SearchBar />
           </div>
@@ -60,11 +56,11 @@ const Navbar = () => {
         {/* Actions */}
         <div className="flex items-center gap-4 shrink-0">
           <SignInModal />
-          <div className="bg-white/40 w-px h-6" />
+          <div className="bg-accent w-px h-12" />
           <Link href="/sign-up">
             <Button
               variant="ghost"
-              className="px-6 border text-black bg-emerald-50 shadow-sm font-medium transition-all hover:bg-sky-50"
+              className="px-6 border shadow-sm font-medium bg-accent"
             >
               Sign Up
             </Button>
@@ -75,17 +71,3 @@ const Navbar = () => {
   );
 };
 
-const ShowNavbar = () => {
-  const pathname = usePathname();
-
-  if (pathname === "/sign-up") return null;
-
-  return (
-    <>
-      <Topbar />
-      <Navbar />
-    </>
-  );
-};
-
-export default ShowNavbar;
