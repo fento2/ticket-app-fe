@@ -32,7 +32,7 @@ export default function SignInModal() {
       </DialogTrigger>
 
       {/* Modal */}
-      <DialogContent className="lg:!max-w-md !max-w-xs">
+      <DialogContent className="md:!max-w-md !max-w-xs">
 
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-center">

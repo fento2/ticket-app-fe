@@ -14,7 +14,7 @@ export const Topbar = () => {
   ];
 
   return (
-    <div className="bg-sidebar-primary/90 text-sm h-8 flex items-center">
+    <div className="bg-sidebar-primary/80 text-sm h-8 flex items-center">
       <div className="max-w-screen-3xl mx-auto px-6 w-full flex justify-end">
         <div className="flex items-center gap-6 font-medium text-white">
           {menu.map((item, index) => (
@@ -34,7 +34,7 @@ export const Topbar = () => {
 
 export const Navbar = () => {
   return (
-    <nav className="bg-sidebar-primary w-full h-20 flex items-center shadow-md sticky top-0 z-50 border-b">
+    <nav className="bg-sidebar-primary w-full h-20 flex items-center sticky top-0 z-50 shadow-md">
       <div className="max-w-screen-3xl mx-auto px-6 w-full flex items-center justify-between">
         {/* Logo + Search Bar container */}
         <div className="flex items-center gap-3 flex-1">

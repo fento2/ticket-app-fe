@@ -101,10 +101,10 @@ const EventSlider = (props: ICategoryProps) => {
     <div className="w-full relative group space-y-4">
       {/* Header Section */}
       <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold tracking-wide relative inline-block">
+        <h2 className="text-2xl font-bold tracking-wide relative inline-block text-primary">
           {props.title}
           {/* Underline accent */}
-          <span className="absolute -bottom-1 left-0 w-full h-1 bg-primary-foreground rounded"></span>
+          <span className="absolute -bottom-1 left-0 w-full h-1 bg-primary rounded"></span>
         </h2>
 
         {/* Action Button */}
