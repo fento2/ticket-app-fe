@@ -1,5 +1,7 @@
 'use client'
-import { InputPassword } from "@/components/core/InputPassword";
+
+import { useController, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useToast } from "@/components/toast-1";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -7,159 +9,155 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useState } from "react";
+import { SignUpInput, signUpSchema } from "@/validations/auth.validation";
+import { Eye, EyeOff } from "lucide-react";
 
 export const FormUser = () => {
     const [showPassword, setShowPassword] = useState(false);
-    const [dataSignUp, setDataSignUp] = useState({
-        firstName: "",
-        lastName: "",
-        username: "",
-        email: "",
-        password: "",
-        confirmPassword: "",
-        addReferral: "",
-    });
-    caches.keys().then();
     const { showToast } = useToast();
-    const handleCreateAccount = async () => {
+    const { register, handleSubmit, formState: { errors }, reset, control } = useForm<SignUpInput>({
+        resolver: zodResolver(signUpSchema),
+        defaultValues: { terms: false }
+    });
+    const { field } = useController({
+        name: 'terms',
+        control
+    })
+    const onSubmit = async (data: SignUpInput) => {
+        try {
+            showToast("Account created successfully!", "success");
+            reset();
+        } catch (error) {
+            console.log(error)
+        }
 
     };
 
-    const inputKey = [
-        {
-            label: 'Username',
-            placeHolder: "Choose a username",
-            value: dataSignUp.username,
-            key: "username"
-        },
-        {
-            label: 'Email',
-            placeHolder: "You@example.com",
-            value: dataSignUp.email,
-            key: "email"
-        }
-    ]
     return (
-        <>
-            {/*Form User*/}
-            <Card className="w-full max-w-lg shadow-lg">
-                <CardHeader>
-                    <CardTitle className="text-center text-2xl">Sign Up</CardTitle>
-                    <CardDescription className="text-center">
-                        Please fill in your information to create an account
-                    </CardDescription>
-                </CardHeader>
+        <Card className="w-full max-w-lg shadow-lg mx-8">
+            <CardHeader>
+                <CardTitle className="text-center text-2xl">Sign Up</CardTitle>
+                <CardDescription className="text-center">
+                    Please fill in your information to create an account
+                </CardDescription>
+            </CardHeader>
 
-                <CardContent>
-                    <form
-                        className="grid gap-4"
-                        onSubmit={(e) => {
-                            e.preventDefault();
-                        }}
-                    >
-
-                        <div className="flex gap-2">
-                            <div className="w-full">
-                                <Label htmlFor="firstName" className="text-md">
-                                    First Name
-                                </Label>
-                                <Input
-                                    id="firstName"
-                                    placeholder="Your full name"
-                                    className="pr-10"
-                                    value={dataSignUp.firstName}
-                                    onChange={(e) => {
-                                        setDataSignUp({ ...dataSignUp, firstName: e.target.value });
-                                    }}
-                                />
-                            </div>
-
-                            <div className="w-full">
-                                <Label htmlFor="lastName" className="text-md">
-                                    Last Name
-                                </Label>
-                                <Input
-                                    id="lastName"
-                                    placeholder="Your full name"
-                                    className="pr-10"
-                                    value={dataSignUp.firstName}
-                                    onChange={(e) => {
-                                        setDataSignUp({ ...dataSignUp, firstName: e.target.value });
-                                    }}
-                                />
-                            </div>
+            <CardContent className="max-h-96 overflow-auto md:max-h-full">
+                <form className="grid gap-4" onSubmit={handleSubmit(onSubmit)}>
+                    <div className="flex gap-2">
+                        <div className="w-full">
+                            <Label htmlFor="firstName">First Name</Label>
+                            <Input id="firstName" placeholder="Your first name" {...register("firstName")} />
+                            {errors.firstName && (
+                                <p className="text-xs text-red-500">{errors.firstName.message}</p>
+                            )}
                         </div>
-                        {inputKey.map((v, i) => (
-                            <div key={i}>
-                                <Label htmlFor={v.label} className="text-md">
-                                    {v.label}
-                                </Label>
-                                <Input
-                                    id={v.label}
-                                    placeholder={v.placeHolder}
-                                    className="pr-10"
-                                    value={v.value}
-                                    onChange={(e) => {
-                                        setDataSignUp({ ...dataSignUp, [v.key]: e.target.value });
-                                    }}
-                                />
-                            </div>
-                        ))}
-                        <InputPassword
-                            label="Password"
-                            showPassword={showPassword}
-                            setShowPassword={setShowPassword}
-                            password={dataSignUp.password}
-                            setPassword={(val) => setDataSignUp((prev) => ({ ...prev, password: val }))}
+
+                        <div className="w-full">
+                            <Label htmlFor="lastName">Last Name</Label>
+                            <Input id="lastName" placeholder="Your last name" {...register("lastName")} />
+                            {errors.lastName && (
+                                <p className="text-xs text-red-500">{errors.lastName.message}</p>
+                            )}
+                        </div>
+                    </div>
+
+                    <div>
+                        <Label htmlFor="username">Username</Label>
+                        <Input id="username" placeholder="Choose a username" {...register("username")} />
+                        {errors.username && (
+                            <p className="text-xs text-red-500">{errors.username.message}</p>
+                        )}
+                    </div>
+
+                    <div>
+                        <Label htmlFor="email">Email</Label>
+                        <Input id="email" placeholder="you@example.com" {...register("email")} />
+                        {errors.email && (
+                            <p className="text-xs text-red-500">{errors.email.message}</p>
+                        )}
+                    </div>
+
+                    <div className="relative">
+                        <Label htmlFor='password' className="text-md">
+                            Password
+                        </Label>
+                        <Input
+                            id={'password'}
+                            type={showPassword ? "text" : "password"}
+                            placeholder="********"
+                            className="pr-10"
+                            {...register('password')}
                         />
-                        <InputPassword
-                            label="Confirm Password"
-                            showPassword={showPassword}
-                            setShowPassword={setShowPassword}
-                            password={dataSignUp.confirmPassword}
-                            setPassword={(val) => setDataSignUp((prev) => ({ ...prev, confirmPassword: val }))}
-                        />
-                        <div>
-                            <Label htmlFor="referral" className="text-md">
-                                Refferal Code (optional)
-                            </Label>
-                            <Input
-                                id="referral"
-                                type="text"
-                                placeholder="USER1234"
-                                className="pr-10"
-                                value={dataSignUp.addReferral}
-                                onChange={(e) => {
-                                    setDataSignUp({
-                                        ...dataSignUp,
-                                        addReferral: e.target.value,
-                                    });
-                                }}
+                        {showPassword ? (
+                            <Eye
+                                className="absolute top-7.5 right-3 text-muted-foreground cursor-pointer"
+                                onClick={() => setShowPassword(false)}
                             />
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <Checkbox id="terms" />
-                            <Label htmlFor="terms" className="text-md">
-                                I agree to the
-                                <Button variant={'link'} className="-mx-4">
-                                    Terms and Conditions
-                                </Button>
-                            </Label>
-                        </div>
+                        ) : (
+                            <EyeOff
+                                className="absolute top-7.5 right-3 text-muted-foreground cursor-pointer"
+                                onClick={() => setShowPassword(true)}
+                            />
+                        )}
+                    </div>
 
-                        {/* Button submit */}
-                        <Button
-                            type="submit"
-                            className="w-full text-md"
-                            onClick={() => {
-                                handleCreateAccount();
-                            }}
-                        >
-                            Create Account
-                        </Button>
-                    </form>
-                </CardContent>
-            </Card>
-        </>
-    )
-}
+                    {errors.password && (
+                        <p className="text-xs text-red-500">{errors.password.message}</p>
+                    )}
+
+                    <div className="relative">
+                        <Label htmlFor='confirmPassword' className="text-md">
+                            Confirm Password
+                        </Label>
+                        <Input
+                            id={'confirmPassword'}
+                            type={showPassword ? "text" : "password"}
+                            placeholder="********"
+                            className="pr-10"
+                            {...register('confirmPassword')}
+                        />
+                        {showPassword ? (
+                            <Eye
+                                className="absolute top-7.5 right-3 text-muted-foreground cursor-pointer"
+                                onClick={() => setShowPassword(false)}
+                            />
+                        ) : (
+                            <EyeOff
+                                className="absolute top-7.5 right-3 text-muted-foreground cursor-pointer"
+                                onClick={() => setShowPassword(true)}
+                            />
+                        )}
+                    </div>
+                    {errors.confirmPassword && (
+                        <p className="text-xs text-red-500">{errors.confirmPassword.message}</p>
+                    )}
+
+                    <div>
+                        <Label htmlFor="referral">Referral Code (optional)</Label>
+                        <Input id="referral" placeholder="USER1234" {...register("addReferral")} />
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                        <Checkbox id="terms" checked={field.value} onCheckedChange={field.onChange} />
+                        <Label htmlFor="terms" className="text-md">
+                            I agree to the
+                            <Button variant={'link'} className="-mx-4">
+                                Terms and Conditions
+                            </Button>
+                        </Label>
+                    </div>
+                    {errors.terms && (
+                        <p className="text-xs text-red-500">{errors.terms.message}</p>
+                    )}
+
+                    <Button type="submit"
+                        className="w-full text-md"
+                    >
+                        Create Account
+                    </Button>
+                </form>
+            </CardContent>
+        </Card>
+    );
+};

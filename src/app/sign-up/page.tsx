@@ -5,11 +5,12 @@ import { Button } from "@/components/ui/button";
 import { FormUser } from "./components/FormUser";
 
 
+
 const SignUp = () => {
 
 
     return (
-        <div className="min-h-screen">
+        <section className="min-h-screen">
             {/* Kolom kiri - Banner */}
             <div
                 className="relative w-full h-screen bg-cover bg-center"
@@ -27,10 +28,15 @@ const SignUp = () => {
 
                 {/* Konten Utama */}
                 <div className="flex items-center justify-center z-40 h-screen bg-black/60">
-                    <FormUser />
+                    <div className="flex gap-6 items-center justify-center">
+
+                        <FormUser />
+
+                    </div>
+
                 </div>
             </div>
-        </div>
+        </section>
     );
 };
 

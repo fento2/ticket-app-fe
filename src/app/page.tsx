@@ -25,8 +25,6 @@ export default function Home() {
         <SlideEvent title="Populer di" />
 
       </DivParentPage>
-
-
     </>
   );
 }
