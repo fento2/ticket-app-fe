@@ -1,4 +1,4 @@
-import EventCharts from "@/components/core/Chart";
+import EventCharts from "@/components/shared/Chart";
 import { Card } from "@/components/ui/card";
 
 const Dashboard = () => {

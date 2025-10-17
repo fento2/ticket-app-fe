@@ -9,12 +9,15 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useState } from "react";
-import { SignUpInput, signUpSchema } from "@/validations/auth.validation";
 import { Eye, EyeOff } from "lucide-react";
+import { apiCall } from "@/helper/apiCall";
+import { SignUpInput, signUpSchema } from "@/features/auth/schema/signUpSchema";
+import { useSearchParams } from "next/navigation";
 
 export const FormUser = () => {
     const [showPassword, setShowPassword] = useState(false);
     const { showToast } = useToast();
+    const searchParams = useSearchParams()
     const { register, handleSubmit, formState: { errors }, reset, control } = useForm<SignUpInput>({
         resolver: zodResolver(signUpSchema),
         defaultValues: { terms: false }
@@ -23,15 +26,20 @@ export const FormUser = () => {
         name: 'terms',
         control
     })
-    const onSubmit = async (data: SignUpInput) => {
+    const onSubmit = async (payload: SignUpInput) => {
+        const sessionId = searchParams.get('sessionId')
         try {
-            showToast("Account created successfully!", "success");
-            reset();
+            const res = await apiCall.post('/auth/signUp', { ...payload, sessionId })
+            if (res.status === 200) {
+                showToast("Account created successfully!", "success");
+                reset();
+            }
         } catch (error) {
             console.log(error)
         }
 
     };
+
 
     return (
         <Card className="w-full max-w-lg shadow-lg mx-8">
@@ -79,7 +87,7 @@ export const FormUser = () => {
                     </div>
 
                     <div className="relative">
-                        <Label htmlFor='password' className="text-md">
+                        <Label htmlFor='password'>
                             Password
                         </Label>
                         <Input
@@ -107,7 +115,7 @@ export const FormUser = () => {
                     )}
 
                     <div className="relative">
-                        <Label htmlFor='confirmPassword' className="text-md">
+                        <Label htmlFor='confirmPassword'>
                             Confirm Password
                         </Label>
                         <Input
