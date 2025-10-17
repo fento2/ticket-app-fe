@@ -1,8 +1,8 @@
-import Category from "@/components/core/Category";
-import DivParentPage from "@/components/core/DivParentPage";
-import SlideEvent from "@/components/core/SlideEvent";
-import SwipeEvent from "@/components/core/SwipeEvent";
-import TopEvent from "@/components/core/TopEvent";
+import Category from "@/components/shared/Category";
+import DivParentPage from "@/components/shared/DivParentPage";
+import SlideEvent from "@/components/shared/SlideEvent";
+import SwipeEvent from "@/components/shared/SwipeEvent";
+import TopEvent from "@/components/shared/TopEvent";
 
 export default function Home() {
   return (
