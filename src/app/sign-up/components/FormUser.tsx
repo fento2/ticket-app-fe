@@ -1,45 +1,23 @@
 'use client'
 
-import { useController, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useToast } from "@/components/toast-1";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
-import { apiCall } from "@/helper/apiCall";
-import { SignUpInput, signUpSchema } from "@/features/auth/schema/signUpSchema";
-import { useSearchParams } from "next/navigation";
+import { useSignUp } from "@/features/auth/api/signUp";
+import { useFormUser } from "@/features/auth/sign-up/useFormUser";
 
 export const FormUser = () => {
-    const [showPassword, setShowPassword] = useState(false);
-    const { showToast } = useToast();
-    const searchParams = useSearchParams()
-    const { register, handleSubmit, formState: { errors }, reset, control } = useForm<SignUpInput>({
-        resolver: zodResolver(signUpSchema),
-        defaultValues: { terms: false }
-    });
-    const { field } = useController({
-        name: 'terms',
-        control
+
+    const { register, handleSubmit, formState: { errors }, reset, field, showPassword, setShowPassword } = useFormUser();
+
+    const { mutate, isPending } = useSignUp({
+        onSuccess: () => {
+            reset()
+        },
     })
-    const onSubmit = async (payload: SignUpInput) => {
-        const sessionId = searchParams.get('sessionId')
-        try {
-            const res = await apiCall.post('/auth/signUp', { ...payload, sessionId })
-            if (res.status === 200) {
-                showToast("Account created successfully!", "success");
-                reset();
-            }
-        } catch (error) {
-            console.log(error)
-        }
-
-    };
-
 
     return (
         <Card className="w-full max-w-lg shadow-lg mx-8">
@@ -51,7 +29,7 @@ export const FormUser = () => {
             </CardHeader>
 
             <CardContent className="max-h-96 overflow-auto md:max-h-full">
-                <form className="grid gap-4" onSubmit={handleSubmit(onSubmit)}>
+                <form className="grid gap-4" onSubmit={handleSubmit((payload) => mutate(payload))}>
                     <div className="flex gap-2">
                         <div className="w-full">
                             <Label htmlFor="firstName">First Name</Label>
@@ -99,20 +77,20 @@ export const FormUser = () => {
                         />
                         {showPassword ? (
                             <Eye
-                                className="absolute top-7.5 right-3 text-muted-foreground cursor-pointer"
+                                className="absolute top-5 right-3 text-muted-foreground cursor-pointer"
                                 onClick={() => setShowPassword(false)}
                             />
                         ) : (
                             <EyeOff
-                                className="absolute top-7.5 right-3 text-muted-foreground cursor-pointer"
+                                className="absolute top-5 right-3 text-muted-foreground cursor-pointer"
                                 onClick={() => setShowPassword(true)}
                             />
                         )}
+                        {errors.password && (
+                            <p className="text-xs text-red-500">{errors.password.message}</p>
+                        )}
                     </div>
 
-                    {errors.password && (
-                        <p className="text-xs text-red-500">{errors.password.message}</p>
-                    )}
 
                     <div className="relative">
                         <Label htmlFor='confirmPassword'>
@@ -127,39 +105,45 @@ export const FormUser = () => {
                         />
                         {showPassword ? (
                             <Eye
-                                className="absolute top-7.5 right-3 text-muted-foreground cursor-pointer"
+                                className="absolute top-5 right-3 text-muted-foreground cursor-pointer"
                                 onClick={() => setShowPassword(false)}
                             />
                         ) : (
                             <EyeOff
-                                className="absolute top-7.5 right-3 text-muted-foreground cursor-pointer"
+                                className="absolute top-5 right-3 text-muted-foreground cursor-pointer"
                                 onClick={() => setShowPassword(true)}
                             />
                         )}
+                        {errors.confirmPassword && (
+                            <p className="text-xs text-red-500">{errors.confirmPassword.message}</p>
+                        )}
                     </div>
-                    {errors.confirmPassword && (
-                        <p className="text-xs text-red-500">{errors.confirmPassword.message}</p>
-                    )}
 
                     <div>
                         <Label htmlFor="referral">Referral Code (optional)</Label>
                         <Input id="referral" placeholder="USER1234" {...register("addReferral")} />
+                        {errors.addReferral && (
+                            <p className="text-xs text-red-500">{errors.addReferral.message}</p>
+                        )}
                     </div>
 
-                    <div className="flex items-center gap-2">
-                        <Checkbox id="terms" checked={field.value} onCheckedChange={field.onChange} />
-                        <Label htmlFor="terms" className="text-md">
-                            I agree to the
-                            <Button variant={'link'} className="-mx-4">
-                                Terms and Conditions
-                            </Button>
-                        </Label>
+                    <div>
+                        <div className="flex items-center gap-2">
+                            <Checkbox id="terms" checked={field.value} onCheckedChange={field.onChange} />
+                            <Label htmlFor="terms" className="text-md">
+                                I agree to the
+                                <Button variant={'link'} className="-mx-4">
+                                    Terms and Conditions
+                                </Button>
+                            </Label>
+                        </div>
+                        {errors.terms && (
+                            <p className="text-xs text-red-500">{errors.terms.message}</p>
+                        )}
                     </div>
-                    {errors.terms && (
-                        <p className="text-xs text-red-500">{errors.terms.message}</p>
-                    )}
 
                     <Button type="submit"
+                        disabled={isPending}
                         className="w-full text-md"
                     >
                         Create Account

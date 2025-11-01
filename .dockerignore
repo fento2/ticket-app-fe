@@ -1,0 +1,32 @@
+# Node modules & dependencies
+node_modules
+npm-debug.log
+yarn-error.log
+pnpm-lock.yaml
+
+# Output Next.js build
+.next
+out
+
+# Git files
+.git
+.gitignore
+
+# Docker file itself
+Dockerfile
+.dockerignore
+
+# Env files (jangan ikut ke image!)
+.env
+.env.local
+.env.development
+.env.production
+
+# Editor stuff
+.vscode
+.idea
+*.swp
+
+# OS cache
+.DS_Store
+Thumbs.db

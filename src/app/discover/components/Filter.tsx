@@ -5,6 +5,10 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { useState } from "react"
+import { RotateCw, SparklesIcon, TagsIcon } from "lucide-react"
+import AccordionFIlter from "./AccordionFilter"
+import { useRouter } from "next/navigation"
+import Link from "next/link"
 
 export const Filter = () => {
     const category = [
@@ -27,7 +31,16 @@ export const Filter = () => {
         "Makassar",
     ]
 
-    const tipeEvent = ["Online", "Offline", "Hybrid"]
+    const tipeEvent = [
+        "Online",
+        "Offline",
+        "Hybrid",
+        "Online",
+        "Offline",
+        "Hybrid",
+        "Online",
+        "Offline",
+        "Hybrid"]
 
     const [selectedCategory, setSelectedCategory] = useState<string[]>([])
     const [selectedLokasi, setSelectedLokasi] = useState<string[]>([])
@@ -46,31 +59,26 @@ export const Filter = () => {
     }
 
     return (
-        <Card className="p-2">
-            <CardHeader>
-                <CardTitle className="text-2xl">Filter</CardTitle>
+        <Card className="max-w-xs m-4">
+
+            <CardHeader className="">
+                <CardTitle className="text-2xl flex justify-between items-center gap-3 tracking-wider leading-loose font-extrabold">
+                    Filter
+                    <Link href={'/discover'}>
+                        <RotateCw className="text-destructive" />
+                    </Link>
+                </CardTitle>
+                <div className="bg-black/20 w-full h-0.5 rounded"></div>
             </CardHeader>
 
             <CardContent className="space-y-6">
                 {/* Category */}
-                <div>
-                    <h3 className="font-semibold mb-2">Category</h3>
-                    <div className="space-y-1">
-                        {category.map((v, i) => (
-                            <Label key={i} className="flex items-center gap-2 cursor-pointer">
-                                <Checkbox
-                                    checked={selectedCategory.includes(v)}
-                                    onCheckedChange={() =>
-                                        handleCheck(v, selectedCategory, setSelectedCategory)
-                                    }
-                                />
-                                {v}
-                            </Label>
-                        ))}
-                    </div>
-                </div>
+                <AccordionFIlter<string>
+                    data={category}
+                    Icon={TagsIcon}
+                    label="Category"
+                />
 
-                {/* Lokasi */}
                 <div>
                     <h3 className="font-semibold mb-2">Lokasi</h3>
                     <div className="space-y-1">
@@ -88,23 +96,10 @@ export const Filter = () => {
                     </div>
                 </div>
 
-                {/* Tipe Event */}
-                <div>
-                    <h3 className="font-semibold mb-2">Tipe Event</h3>
-                    <div className="space-y-1">
-                        {tipeEvent.map((v, i) => (
-                            <Label key={i} className="flex items-center gap-2 cursor-pointer">
-                                <Checkbox
-                                    checked={selectedTipe.includes(v)}
-                                    onCheckedChange={() =>
-                                        handleCheck(v, selectedTipe, setSelectedTipe)
-                                    }
-                                />
-                                {v}
-                            </Label>
-                        ))}
-                    </div>
-                </div>
+                <AccordionFIlter
+                    data={tipeEvent}
+                    label="Type Event"
+                    Icon={SparklesIcon} />
 
                 {/* Waktu */}
                 <div>
