@@ -1,7 +1,5 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useToast } from "@/components/toast-1";
 import { Button } from "@/components/ui/button";
 import {
     Card,
@@ -12,9 +10,6 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { apiCall } from "@/helper/apiCall";
-import { useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
 import {
     Dialog,
     DialogContent,
@@ -24,54 +19,17 @@ import {
     DialogFooter,
 } from "@/components/ui/dialog";
 import { Spinner } from "@/components/ui/spinner";
-import { EmailInput, emailSchema } from "@/features/auth/schema/signUpSchema";
-import { useMutation } from "@tanstack/react-query";
-import { useState } from "react";
-import { isAxiosError } from "axios";
-import { useSendOtpMutation } from "@/features/auth/api/sendOtpMutation";
+import { useSendOtp } from "@/features/auth/api/sendOtp";
+import { useFormEmail } from "@/features/auth/sign-up/useFormEmail";
 
 export const FormEmail = () => {
-    const { showToast } = useToast();
-    const router = useRouter();
-    const [showDialog, setShowDialog] = useState(false);
-    const [sessionId, setSessionId] = useState<string | undefined>();
-
-    // --- setup form ---
     const {
         register,
         handleSubmit,
         formState: { errors },
-    } = useForm<EmailInput>({
-        resolver: zodResolver(emailSchema),
-    });
+    } = useFormEmail();
 
-    // --- setup mutation ---
-    const sendOtpMutation = useMutation({
-        mutationFn: async (payload: EmailInput) => {
-            const { data } = await apiCall.post("/auth/send-otp", payload);
-            return data;
-        },
-        onSuccess: (data) => {
-            setShowDialog(true);
-            setSessionId(data.result.data.sessionId);
-            showToast(data.result.message, "success");
-        },
-        onError: (error) => {
-            if (isAxiosError(error)) {
-                showToast(error.response?.data.result.message, 'error');
-            }
-            console.error(error);
-        },
-    });
-    const sendOtp = useSendOtpMutation({
-        onError: () => {
-
-        }
-    })
-    // --- handle form submit ---
-    const onSubmit = (payload: EmailInput) => {
-        sendOtpMutation.mutate(payload);
-    };
+    const { mutate, isPending, router, sessionId, showDialog, setShowDialog } = useSendOtp()
 
     return (
         <>
@@ -84,7 +42,7 @@ export const FormEmail = () => {
                 </CardHeader>
 
                 <CardContent className="max-h-96 overflow-auto md:max-h-full">
-                    <form className="grid gap-4" onSubmit={handleSubmit(onSubmit)}>
+                    <form className="grid gap-4" onSubmit={handleSubmit((payload) => mutate(payload))}>
                         <div>
                             <Label htmlFor="email">Email</Label>
                             <Input
@@ -99,11 +57,11 @@ export const FormEmail = () => {
                         </div>
 
                         <Button
-                            disabled={sendOtpMutation.isPending}
+                            disabled={isPending}
                             type="submit"
                             className="w-full text-md"
                         >
-                            {sendOtpMutation.isPending ? (
+                            {isPending ? (
                                 <>
                                     <Spinner />
                                     Sending...
@@ -116,7 +74,6 @@ export const FormEmail = () => {
                 </CardContent>
             </Card>
 
-            {/* Dialog */}
             <Dialog open={showDialog} onOpenChange={setShowDialog}>
                 <DialogContent
                     className="sm:max-w-md"
