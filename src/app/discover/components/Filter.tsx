@@ -8,7 +8,6 @@ import { useState } from "react"
 import { RotateCw, SparklesIcon, TagsIcon } from "lucide-react"
 import AccordionFIlter from "./AccordionFilter"
 import { useRouter } from "next/navigation"
-import Link from "next/link"
 
 export const Filter = () => {
     const category = [
@@ -40,14 +39,13 @@ export const Filter = () => {
         "Hybrid",
         "Online",
         "Offline",
-        "Hybrid"]
+        "Hybrid"];
 
-    const [selectedCategory, setSelectedCategory] = useState<string[]>([])
     const [selectedLokasi, setSelectedLokasi] = useState<string[]>([])
-    const [selectedTipe, setSelectedTipe] = useState<string[]>([])
     const [minPrice, setMinPrice] = useState("")
     const [maxPrice, setMaxPrice] = useState("")
     const [date, setDate] = useState("")
+    const router = useRouter()
 
     const handleCheck = (
         value: string,
@@ -58,25 +56,39 @@ export const Filter = () => {
         else setter([...list, value])
     }
 
+    const categoryAccordion = {
+        data: category,
+        Icon: TagsIcon,
+        label: "Category"
+    }
+    const typeEventAccordion = {
+        data: tipeEvent,
+        Icon: SparklesIcon,
+        label: "Type Event",
+    }
+
     return (
         <Card className="max-w-xs m-4">
 
-            <CardHeader className="">
+            <CardHeader>
                 <CardTitle className="text-2xl flex justify-between items-center gap-3 tracking-wider leading-loose font-extrabold">
                     Filter
-                    <Link href={'/discover'}>
-                        <RotateCw className="text-destructive" />
-                    </Link>
+                    <RotateCw className="text-destructive"
+                        onClick={() => router.replace(window.location.pathname)}
+                    />
                 </CardTitle>
                 <div className="bg-black/20 w-full h-0.5 rounded"></div>
             </CardHeader>
 
             <CardContent className="space-y-6">
-                {/* Category */}
-                <AccordionFIlter<string>
-                    data={category}
-                    Icon={TagsIcon}
-                    label="Category"
+
+                <AccordionFIlter
+                    accordionItemData={
+                        [
+                            categoryAccordion,
+                            typeEventAccordion
+                        ]
+                    }
                 />
 
                 <div>
@@ -96,10 +108,6 @@ export const Filter = () => {
                     </div>
                 </div>
 
-                <AccordionFIlter
-                    data={tipeEvent}
-                    label="Type Event"
-                    Icon={SparklesIcon} />
 
                 {/* Waktu */}
                 <div>

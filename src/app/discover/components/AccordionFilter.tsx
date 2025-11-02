@@ -2,88 +2,83 @@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Button } from "@/components/ui/button"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
-import { LucideProps, X } from "lucide-react"
-import { useSearchParams } from "next/navigation"
-import React, { useState } from "react"
+import { AccordionFilterProps, useAccordionFilter } from "@/features/event/discover/useAccordionFilter"
+import { X } from "lucide-react"
+import React from "react"
 
-type AccordionFIlterProps<DataType> = {
-    label: string,
-    Icon: React.ComponentType<LucideProps>
-    data: DataType[],
-}
+const AccordionFIlter = ({ accordionItemData }: AccordionFilterProps) => {
 
-const AccordionFIlter = <DataType extends React.ReactNode>({ data, Icon, label }: AccordionFIlterProps<DataType>) => {
-    const [selectedData, setSelectedData] = useState<typeof data>([])
-    const searchParam = useSearchParams()
-    const currentCategories = searchParam.getAll("category")
+    const {
+        addSelected,
+        countSelect,
+        delateAllSelectedByLabel,
+        accordionData
+    } = useAccordionFilter({ accordionItemData })
+
     return (
-        <Accordion type="single" collapsible>
-            <AccordionItem value={label}>
+        <Accordion type="single" collapsible className="grid grid-cols-1 gap-1.5">
+            {accordionItemData.map((v, i) => (
+                <AccordionItem key={i} value={v.label} >
 
-                <div className="mb-4">
-                    <AccordionTrigger className="hover:no-underline items-center" size={30}>
-                        <span className="flex gap-2 items-center text-lg font-semibold tracking-widest">
-                            <Icon size={20} className="text-primary" />
-                            {label}
-                            {(selectedData.length !== 0) &&
-                                <>
-                                    <div
-                                        className="bg-primary h-6 flex items-center justify-center gap-2 px-3 rounded-full"
-                                    >
-                                        <Tooltip>
-                                            <TooltipTrigger asChild>
-                                                <span className="text-white text-xs">
-                                                    {selectedData.length}
-                                                </span>
-                                            </TooltipTrigger>
-                                            <TooltipContent>
-                                                {selectedData.join(", ")}
-                                            </TooltipContent>
-                                        </Tooltip>
+                    <div className="mb-4">
+                        <AccordionTrigger className="hover:no-underline items-center" size={30}>
+                            <span className="flex gap-2 items-center text-lg font-semibold tracking-widest">
+                                <v.Icon size={20} className="text-primary" />
+                                {v.label}
+                                {countSelect(v.label) > 0 &&
+                                    <>
+                                        <div
+                                            className="bg-primary h-6 flex items-center justify-center gap-2 px-3 rounded-full"
+                                        >
+                                            <Tooltip>
+                                                <TooltipTrigger asChild>
+                                                    <span className="text-white text-xs">
+                                                        {countSelect(v.label)}
+                                                    </span>
+                                                </TooltipTrigger>
+                                                <TooltipContent>
+                                                    {accordionData.find((a) => a.label === v.label)?.data.join(", ")}
+                                                </TooltipContent>
+                                            </Tooltip>
 
-                                        <X
-                                            size={14}
-                                            strokeWidth={3}
-                                            className="text-destructive cursor-pointer transition-all duration-200 hover:scale-125 hover:text-red-600"
-                                            onClick={(e) => {
-                                                e.stopPropagation()
-                                                setSelectedData([])
-                                            }}
-                                        />
+                                            <X
+                                                size={14}
+                                                strokeWidth={3}
+                                                className="text-destructive cursor-pointer transition-all duration-200 hover:scale-125 hover:text-red-600"
+                                                onClick={(e) => {
+                                                    e.stopPropagation()
+                                                    delateAllSelectedByLabel(v.label)
+                                                }}
+                                            />
 
-                                    </div>
-                                </>
-                            }
-                        </span>
-                    </AccordionTrigger>
-                    <div className="bg-black/20 w-full h-0.5 rounded"></div>
-                </div>
-
-                <AccordionContent>
-                    <div className="grid grid-cols-2 gap-2">
-                        {data.map((v, i) => (
-
-                            <Button
-                                key={i}
-                                variant={"outline"}
-                                className={`cursor-pointer text-sm font-semibold tracking-widest
-                               ${selectedData.includes(v) ? 'bg-primary hover:bg-primary hover:text-white text-white' : ''}`}
-                                onClick={() => {
-                                    if (selectedData.includes(v)) {
-                                        setSelectedData((prev) => prev.filter((fv) => fv !== v))
-                                    } else {
-                                        setSelectedData((prev) => [...prev, v])
-                                    }
-                                }}
-
-                            >
-                                {v}
-                            </Button>
-
-                        ))}
+                                        </div>
+                                    </>
+                                }
+                            </span>
+                        </AccordionTrigger>
                     </div>
-                </AccordionContent>
-            </AccordionItem>
+
+                    <AccordionContent>
+                        <div className="grid grid-cols-2 gap-2">
+                            {v.data.map((vm, i) => (
+
+                                <Button
+                                    key={i}
+                                    variant={"outline"}
+                                    className={`cursor-pointer text-sm font-medium tracking-wider rounded-full
+                               ${accordionData.some((vs) => vs.data.includes(vm)) ? 'bg-primary hover:bg-primary hover:text-white text-white' : ''}`}
+                                    onClick={() => addSelected(vm, v.label)}
+
+                                >
+                                    {vm}
+                                </Button>
+
+                            ))}
+                        </div>
+                    </AccordionContent>
+                </AccordionItem>
+            ))}
+
         </Accordion >
     )
 }
