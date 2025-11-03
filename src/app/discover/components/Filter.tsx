@@ -1,13 +1,14 @@
 "use client"
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { useState } from "react"
-import { RotateCw, SparklesIcon, TagsIcon } from "lucide-react"
+import { MapIcon, RotateCw, SparklesIcon, TagsIcon } from "lucide-react"
 import AccordionFIlter from "./AccordionFilter"
 import { useRouter } from "next/navigation"
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
+import { Separator } from "@/components/ui/separator"
+import BadgeActive from "./BadgeActive"
 
 export const Filter = () => {
     const category = [
@@ -28,6 +29,13 @@ export const Filter = () => {
         "Bali",
         "Yogyakarta",
         "Makassar",
+        "Jakarta",
+        "Bandung",
+        "Surabaya",
+        "Medan",
+        "Bali",
+        "Yogyakarta",
+        "Makassar",
     ]
 
     const tipeEvent = [
@@ -39,7 +47,8 @@ export const Filter = () => {
         "Hybrid",
         "Online",
         "Offline",
-        "Hybrid"];
+        "Hybrid"
+    ];
 
     const [selectedLokasi, setSelectedLokasi] = useState<string[]>([])
     const [minPrice, setMinPrice] = useState("")
@@ -80,7 +89,7 @@ export const Filter = () => {
                 <div className="bg-black/20 w-full h-0.5 rounded"></div>
             </CardHeader>
 
-            <CardContent className="space-y-6">
+            <CardContent className="space-y-4">
 
                 <AccordionFIlter
                     accordionItemData={
@@ -91,23 +100,33 @@ export const Filter = () => {
                     }
                 />
 
-                <div>
-                    <h3 className="font-semibold mb-2">Lokasi</h3>
-                    <div className="space-y-1">
-                        {lokasi.map((v, i) => (
-                            <Label key={i} className="flex items-center gap-2 cursor-pointer">
-                                <Checkbox
-                                    checked={selectedLokasi.includes(v)}
-                                    onCheckedChange={() =>
-                                        handleCheck(v, selectedLokasi, setSelectedLokasi)
-                                    }
-                                />
-                                {v}
-                            </Label>
-                        ))}
-                    </div>
-                </div>
+                <Separator />
 
+                <Command>
+                    <span className="flex gap-2 items-center text-lg font-semibold tracking-widest">
+                        <MapIcon className="text-primary" />
+                        Lokasi
+                        {selectedLokasi.length > 0 && <>
+                            <BadgeActive
+                                countSelected={() => selectedLokasi.length} contentActive={() => selectedLokasi.join(', ')} resetBadge={() => setSelectedLokasi([])} />
+                        </>}
+                    </span>
+                    <CommandInput />
+                    <CommandList className="scroll-thin">
+                        <CommandEmpty>No results found.</CommandEmpty>
+                        <CommandGroup>
+                            {lokasi.map((v, i) => (
+                                <CommandItem key={i}
+                                    value={v}
+                                    onSelect={() => handleCheck(v, selectedLokasi, setSelectedLokasi)}
+                                    className={`${selectedLokasi.includes(v) ? 'bg-primary text-white data-[selected=true]:text-white data-[selected=true]:bg-primary' : ''}`}
+                                >
+                                    {v}
+                                </CommandItem>
+                            ))}
+                        </CommandGroup>
+                    </CommandList>
+                </Command>
 
                 {/* Waktu */}
                 <div>

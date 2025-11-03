@@ -4,10 +4,10 @@ const Discover = () => {
     return (
         <div>
             <div className="flex">
-                <div className="sticky top-20 h-screen">
+                <div className="">
                     <Filter />
                 </div>
-                <div className="overflow-y-auto h-[2000px] flex-1 bg-amber-300">
+                <div className="overflow-y-auto h-[200px] flex-1 bg-amber-300">
                     {/* konten panjang */}
                 </div>
             </div>
