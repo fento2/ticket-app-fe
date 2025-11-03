@@ -1,10 +1,9 @@
 'use clinet'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Button } from "@/components/ui/button"
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { AccordionFilterProps, useAccordionFilter } from "@/features/event/discover/useAccordionFilter"
-import { X } from "lucide-react"
 import React from "react"
+import BadgeActive from "./BadgeActive"
 
 const AccordionFIlter = ({ accordionItemData }: AccordionFilterProps) => {
 
@@ -16,7 +15,7 @@ const AccordionFIlter = ({ accordionItemData }: AccordionFilterProps) => {
     } = useAccordionFilter({ accordionItemData })
 
     return (
-        <Accordion type="single" collapsible className="grid grid-cols-1 gap-1.5">
+        <Accordion type="single" collapsible className="">
             {accordionItemData.map((v, i) => (
                 <AccordionItem key={i} value={v.label} >
 
@@ -27,33 +26,14 @@ const AccordionFIlter = ({ accordionItemData }: AccordionFilterProps) => {
                                 {v.label}
                                 {countSelect(v.label) > 0 &&
                                     <>
-                                        <div
-                                            className="bg-primary h-6 flex items-center justify-center gap-2 px-3 rounded-full"
-                                        >
-                                            <Tooltip>
-                                                <TooltipTrigger asChild>
-                                                    <span className="text-white text-xs">
-                                                        {countSelect(v.label)}
-                                                    </span>
-                                                </TooltipTrigger>
-                                                <TooltipContent>
-                                                    {accordionData.find((a) => a.label === v.label)?.data.join(", ")}
-                                                </TooltipContent>
-                                            </Tooltip>
-
-                                            <X
-                                                size={14}
-                                                strokeWidth={3}
-                                                className="text-destructive cursor-pointer transition-all duration-200 hover:scale-125 hover:text-red-600"
-                                                onClick={(e) => {
-                                                    e.stopPropagation()
-                                                    delateAllSelectedByLabel(v.label)
-                                                }}
-                                            />
-
-                                        </div>
+                                        <BadgeActive
+                                            contentActive={() => accordionData.find((a) => a.label === v.label)?.data.join(", ")}
+                                            countSelected={() => countSelect(v.label)}
+                                            resetBadge={() => delateAllSelectedByLabel(v.label)}
+                                        />
                                     </>
                                 }
+
                             </span>
                         </AccordionTrigger>
                     </div>
@@ -78,7 +58,6 @@ const AccordionFIlter = ({ accordionItemData }: AccordionFilterProps) => {
                     </AccordionContent>
                 </AccordionItem>
             ))}
-
         </Accordion >
     )
 }
