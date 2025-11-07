@@ -1,91 +1,98 @@
-import { Card, CardContent, CardHeader } from "../ui/card";
+'use client'
+import { useControllSlide } from "@/features/event/slide/useControllSlide";
+import { Card, CardHeader } from "../ui/card";
+
+const categoryList = [
+  {
+    banner:
+      "https://images.pexels.com/photos/3183150/pexels-photo-3183150.jpeg",
+    name: "Music",
+  },
+  {
+    banner:
+      "https://images.pexels.com/photos/164879/pexels-photo-164879.jpeg",
+    name: "Sport",
+  },
+  {
+    banner:
+      "https://images.pexels.com/photos/167636/pexels-photo-167636.jpeg",
+    name: "Art",
+  },
+  {
+    banner:
+      "https://images.pexels.com/photos/8856048/pexels-photo-8856048.jpeg",
+    name: "Food",
+  },
+  {
+    banner:
+      "https://images.pexels.com/photos/167964/pexels-photo-167964.jpeg",
+    name: "Travel",
+  },
+  {
+    banner:
+      "https://images.pexels.com/photos/3183150/pexels-photo-3183150.jpeg",
+    name: "Music",
+  },
+  {
+    banner:
+      "https://images.pexels.com/photos/164879/pexels-photo-164879.jpeg",
+    name: "Sport",
+  },
+  {
+    banner:
+      "https://images.pexels.com/photos/167636/pexels-photo-167636.jpeg",
+    name: "Art",
+  },
+  {
+    banner:
+      "https://images.pexels.com/photos/8856048/pexels-photo-8856048.jpeg",
+    name: "Food",
+  },
+  {
+    banner:
+      "https://images.pexels.com/photos/167964/pexels-photo-167964.jpeg",
+    name: "Travel",
+  },
+];
 
 const Category = () => {
-  const categoryList = [
-    {
-      banner:
-        "https://images.pexels.com/photos/3183150/pexels-photo-3183150.jpeg",
-      name: "Music",
-    },
-    {
-      banner:
-        "https://images.pexels.com/photos/164879/pexels-photo-164879.jpeg",
-      name: "Sport",
-    },
-    {
-      banner:
-        "https://images.pexels.com/photos/167636/pexels-photo-167636.jpeg",
-      name: "Art",
-    },
-    {
-      banner:
-        "https://images.pexels.com/photos/8856048/pexels-photo-8856048.jpeg",
-      name: "Food",
-    },
-    {
-      banner:
-        "https://images.pexels.com/photos/167964/pexels-photo-167964.jpeg",
-      name: "Travel",
-    },
-    {
-      banner:
-        "https://images.pexels.com/photos/3183150/pexels-photo-3183150.jpeg",
-      name: "Music",
-    },
-    {
-      banner:
-        "https://images.pexels.com/photos/164879/pexels-photo-164879.jpeg",
-      name: "Sport",
-    },
-    {
-      banner:
-        "https://images.pexels.com/photos/167636/pexels-photo-167636.jpeg",
-      name: "Art",
-    },
-    {
-      banner:
-        "https://images.pexels.com/photos/8856048/pexels-photo-8856048.jpeg",
-      name: "Food",
-    },
-    {
-      banner:
-        "https://images.pexels.com/photos/167964/pexels-photo-167964.jpeg",
-      name: "Travel",
-    },
-  ];
+  const { emblaRef } = useControllSlide({
+    align: "start",
+    dragFree: true,
+  });
 
   return (
     <div>
-      <Card>
+      <Card className="relative group w-full">
         <CardHeader className="text-xl font-bold">Category</CardHeader>
-        <CardContent>
-          <div className="flex gap-4 overflow-x-auto scrollbar-hide h-40">
+
+        {/* embla wrapper */}
+        <div className="overflow-hidden embla" ref={emblaRef}>
+          {/* embla container */}
+          <div className="flex embla__container gap-4 px-4 mr-4">
             {categoryList.map((value, index) => (
               <div
                 key={index}
-                className="relative min-w-[8rem] h-32 rounded-lg overflow-hidden shadow-md cursor-pointer hover:scale-105 transition-transform"
+                className="embla__slide flex-[0_0_auto] w-[8rem] h-32 rounded-lg overflow-hidden shadow-md cursor-pointer"
               >
-                {/* Background */}
                 <div
-                  className="w-full h-full bg-cover bg-center flex items-center justify-center"
+                  className="w-full h-full bg-cover bg-center relative flex items-center justify-center"
                   style={{
                     backgroundImage: `url(${value.banner})`,
                   }}
                 >
-                  {/* Overlay + Text */}
-                  <div className="absolute inset-0 bg-black/40" />
-                  <p className="relative text-white font-semibold text-lg">
-                    {value.name}
-                  </p>
+                  <div className="absolute inset-0 bg-black/50 hover:bg-transparent hover:scale-150 transition-all">
+                    <p className="flex justify-center text-center m-12 text-white font-semibold text-lg">
+                      {value.name}
+                    </p>
+                  </div>
                 </div>
               </div>
             ))}
           </div>
-          <div></div>
-        </CardContent>
+        </div>
       </Card>
     </div>
   );
 };
-
 export default Category;
