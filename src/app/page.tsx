@@ -1,33 +1,29 @@
 import Category from "@/components/shared/Category";
 import DivParentPage from "@/components/shared/DivParentPage";
-import Embla from "@/components/shared/Embla";
-import SlideEvent from "@/components/shared/SlideEvent";
-import SwipeEvent from "@/components/shared/SwipeEvent";
+import BannerSlide from "@/components/shared/BannerSlide";
 import TopEvent from "@/components/shared/TopEvent";
+import EventSlide from "@/components/shared/EventSlide";
 
 export default function Home() {
   return (
-    <>
+    <section>
       <DivParentPage className="my-8 space-y-12">
 
-        <SwipeEvent title="swipe1" />
+        <BannerSlide />
 
-        <SlideEvent title="Feature Event" />
+        <EventSlide title="Featured Events" />
 
       </DivParentPage>
 
-      {/* top event */}
       <TopEvent />
-
-      <Embla />
 
       <DivParentPage className="my-8 space-y-12">
 
         <Category />
 
-        <SlideEvent title="Populer di" />
+        <EventSlide title="Populer di" />
 
       </DivParentPage>
-    </>
+    </section>
   );
 }
