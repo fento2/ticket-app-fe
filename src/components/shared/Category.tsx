@@ -76,12 +76,12 @@ const Category = () => {
                 className="embla__slide flex-[0_0_auto] w-[8rem] h-32 rounded-lg overflow-hidden shadow-md cursor-pointer"
               >
                 <div
-                  className="w-full h-full bg-cover bg-center relative flex items-center justify-center"
+                  className="w-full h-full bg-cover bg-center relative flex items-center justify-center hover:scale-150 transition-transform"
                   style={{
                     backgroundImage: `url(${value.banner})`,
                   }}
                 >
-                  <div className="absolute inset-0 bg-black/50 hover:bg-transparent hover:scale-150 transition-all">
+                  <div className="absolute inset-0 hover:bg-black/50 hover:scale-125 transition-all">
                     <p className="flex justify-center text-center m-12 text-white font-semibold text-lg">
                       {value.name}
                     </p>

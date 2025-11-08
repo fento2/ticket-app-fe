@@ -3,7 +3,8 @@ import { LucideProps } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
-type AccordionFIlterType = {
+export type AccordionFIlterType = {
+  type: "command" | "select";
   label: string;
   Icon: React.ComponentType<LucideProps>;
   data: string[];
