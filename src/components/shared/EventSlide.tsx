@@ -4,6 +4,8 @@ import { Card, CardContent, CardFooter } from "../ui/card";
 import NavButtonSlide from "./NavButtonSlide"
 import { useControllSlide } from "@/features/event/slide/useControllSlide"
 import { Button } from "../ui/button";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
+import { Separator } from "../ui/separator";
 
 const events = [
     {
@@ -118,16 +120,16 @@ const EventSlide = ({ title }: EventSlideProps) => {
             </div>
 
             {/* Carousel Container */}
-            <div className="overflow-hidden rounded-2xl embla" ref={emblaRef}>
-                <div className="embla__container flex gap-6">
+            <div className="overflow-hidden embla" ref={emblaRef}>
+                <div className="embla__container flex gap-4">
                     {events.map((event, index) => (
                         <div
                             key={index}
                             className="embla__slide flex-[0_0_75%] md:flex-[0_0_35%] lg:flex-[0_0_20%] min-w-2"
                         >
-                            <Card className="overflow-hidden rounded-xl shadow-md hover:shadow-lg transition-all">
+                            <Card className="overflow-hidden border-none shadow-none bg-transparent hover:bg-primary/10 transition-colors">
                                 {/* Banner */}
-                                <div className="relative w-full h-48 -my-6">
+                                <div className="relative w-full h-52 -my-6">
                                     <Image
                                         src={event.image}
                                         alt={event.title}
@@ -138,17 +140,24 @@ const EventSlide = ({ title }: EventSlideProps) => {
 
                                 {/* Konten */}
                                 <CardContent className="p-4">
-                                    <h3 className="font-semibold text-lg truncate">
-                                        {event.title}
-                                    </h3>
+                                    <Tooltip delayDuration={1000}>
+                                        <TooltipTrigger asChild>
+                                            <h3 className="font-semibold text-lg truncate">
+                                                {event.title}
+                                            </h3>
+                                        </TooltipTrigger>
+                                        <TooltipContent>
+                                            {event.title}
+                                        </TooltipContent>
+                                    </Tooltip>
                                     <p className="text-sm text-gray-500 mt-1">{event.date}</p>
-                                    <p className="text-sm font-semibold mt-1 text-emerald-700">
+                                    <p className="text-sm font-semibold mt-1 text-primary">
                                         Rp{event.startPrice.toLocaleString("id-ID")}
                                     </p>
                                 </CardContent>
-
+                                <Separator />
                                 {/* Footer Organizer */}
-                                <CardFooter className="px-4 py-2 border-t border-gray-200 flex items-center gap-2">
+                                <CardFooter className="px-4 flex items-center gap-2">
                                     <div className="relative w-6 h-6 rounded-full overflow-hidden">
                                         <Image
                                             src={event.organizerImage}

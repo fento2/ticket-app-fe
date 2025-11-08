@@ -14,16 +14,14 @@ const ShowNavbarAndFooter = ({ children }: ShowNavbarAndFooterProps) => {
     if (shouldHide) return children
     return (
         <>
-            <div className="flex flex-col min-h-screen">
-                <Topbar />
-                <Navbar />
+            <Topbar />
+            <Navbar />
 
-                <main className="flex-1">
-                    {children}
-                </main>
+            <main >
+                {children}
+            </main>
 
-                <Footer />
-            </div>
+            <Footer />
         </>
     )
 
