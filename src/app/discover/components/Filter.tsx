@@ -3,14 +3,15 @@
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import React, { useState } from "react"
-import { MapIcon, SparklesIcon, TagsIcon } from "lucide-react"
+import { MapIcon, Minus, SparklesIcon, TagsIcon, TimerIcon } from "lucide-react"
 import AccordionFIlter from "./AccordionFilter"
 import { useRouter, useSearchParams } from "next/navigation"
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
-import { Separator } from "@/components/ui/separator"
 import BadgeActive from "./BadgeActive"
 import { Calendar } from "@/components/ui/calendar"
 import { AccordionFIlterType } from "@/features/event/discover/useAccordionFilter"
+import { AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
+import type { DateRange } from "react-day-picker"
 
 export const Filter = () => {
     const category = [
@@ -46,9 +47,9 @@ export const Filter = () => {
     ];
 
     const [selectedLokasi, setSelectedLokasi] = useState<string[]>([])
+    const [selectedWaktu, setSelectedWaktu] = useState<DateRange | undefined>()
     const [minPrice, setMinPrice] = useState("")
     const [maxPrice, setMaxPrice] = useState("")
-    const [date, setDate] = useState("")
     const router = useRouter()
     const searchParam = useSearchParams()
 
@@ -73,13 +74,11 @@ export const Filter = () => {
     }
 
     const categoryAccordion: AccordionFIlterType = {
-        type: "select",
         data: category,
         Icon: TagsIcon,
         label: "Category"
     }
     const typeEventAccordion: AccordionFIlterType = {
-        type: "select",
         data: tipeEvent,
         Icon: SparklesIcon,
         label: "Type Event",
@@ -105,49 +104,80 @@ export const Filter = () => {
                             typeEventAccordion
                         ]
                     }
-                />
+                >
+                    <AccordionItem value="lokasi">
+                        <Command className="">
+                            <AccordionTrigger className="hover:no-underline items-center" size={30}>
+                                <span className="flex gap-2 items-center text-lg font-semibold tracking-widest">
+                                    <MapIcon className="text-primary" />
+                                    Lokasi
+                                    {selectedLokasi.length > 0 &&
+                                        <>
+                                            <BadgeActive
+                                                countSelected={() => selectedLokasi.length}
+                                                contentActive={() => selectedLokasi.join(', ')}
+                                                resetBadge={() => setSelectedLokasi([])}
+                                            />
+                                        </>
+                                    }
+                                </span>
+                            </AccordionTrigger>
+                            <AccordionContent>
+                                <div className="border rounded-lg">
+                                    <CommandInput />
+                                    <CommandList className="scroll-thin max-h-56" >
+                                        <CommandEmpty>No results found.</CommandEmpty>
+                                        <CommandGroup >
+                                            {lokasi.map((v, i) => (
+                                                <CommandItem key={i}
+                                                    value={v}
+                                                    onSelect={() => handleCheck(v, selectedLokasi, setSelectedLokasi)}
+                                                    className={`${selectedLokasi.includes(v) ? 'bg-primary text-white data-[selected=true]:text-white data-[selected=true]:bg-primary' : ''}`}
+                                                >
+                                                    {v}
+                                                </CommandItem>
+                                            ))}
+                                        </CommandGroup>
+                                    </CommandList>
+                                </div>
+                            </AccordionContent>
+                        </Command>
+                    </AccordionItem>
 
-                <Command className="space-y-4">
-                    <Separator />
-                    <div>
-                        <span className="flex gap-2 items-center text-lg font-semibold tracking-widest">
-                            <MapIcon className="text-primary" />
-                            Lokasi
-                            {selectedLokasi.length > 0 && <>
-                                <BadgeActive
-                                    countSelected={() => selectedLokasi.length} contentActive={() => selectedLokasi.join(', ')} resetBadge={() => setSelectedLokasi([])}
-                                />
-                            </>}
-                        </span>
-                        <CommandInput />
-                        <CommandList className="scroll-thin max-h-56" >
-                            <CommandEmpty>No results found.</CommandEmpty>
-                            <CommandGroup >
-                                {lokasi.map((v, i) => (
-                                    <CommandItem key={i}
-                                        value={v}
-                                        onSelect={() => handleCheck(v, selectedLokasi, setSelectedLokasi)}
-                                        className={`${selectedLokasi.includes(v) ? 'bg-primary text-white data-[selected=true]:text-white data-[selected=true]:bg-primary' : ''}`}
-                                    >
-                                        {v}
-                                    </CommandItem>
-                                ))}
-                            </CommandGroup>
-                        </CommandList>
-                    </div>
-                </Command>
+                    <AccordionItem value="waktu">
+                        <AccordionTrigger className="hover:no-underline items-center" size={30}>
+                            <span className="flex gap-2 items-center text-lg font-semibold tracking-widest">
+                                <TimerIcon className="text-primary" />
+                                Waktu
+                                {selectedWaktu &&
+                                    <>
+                                        <BadgeActive
+                                            countSelected={() => 1}
+                                            contentActive={() => (
+                                                <div className="flex items-center gap-1.5">
+                                                    {selectedWaktu.from?.toDateString()}
+                                                    <Minus size={10} />
+                                                    {selectedWaktu.to?.toDateString()}
+                                                </div>
+                                            )}
+                                            resetBadge={() => setSelectedWaktu(undefined)}
+                                        />
+                                    </>}
+                            </span>
+                        </AccordionTrigger>
+                        <AccordionContent>
+                            <Calendar
+                                mode="range"
+                                numberOfMonths={1}
+                                className="border rounded-lg"
+                                captionLayout="dropdown"
+                                selected={selectedWaktu}
+                                onSelect={setSelectedWaktu}
+                            />
+                        </AccordionContent>
 
-
-                {/* Waktu */}
-                <div>
-                    <h3 className="font-semibold mb-2">Waktu</h3>
-                    <Calendar
-                        mode="range"
-                        numberOfMonths={1}
-                        className="border rounded-lg"
-                        captionLayout="dropdown"
-                    />
-                </div>
+                    </AccordionItem>
+                </AccordionFIlter>
 
 
                 {/* Harga */}
@@ -170,6 +200,6 @@ export const Filter = () => {
                     </div>
                 </div>
             </CardContent>
-        </Card>
+        </Card >
     )
 }

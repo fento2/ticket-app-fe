@@ -2,8 +2,8 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 import { X } from "lucide-react"
 
 type BadgeActiveProps = {
-    countSelected: () => number
-    contentActive: () => string | undefined
+    countSelected: () => number | React.ReactElement | string
+    contentActive: () => string | React.ReactElement | undefined
     resetBadge: () => void
 }
 const BadgeActive = ({ contentActive, countSelected, resetBadge }: BadgeActiveProps) => {
