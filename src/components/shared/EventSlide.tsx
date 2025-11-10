@@ -95,10 +95,9 @@ type EventSlideProps = {
 }
 
 const EventSlide = ({ title }: EventSlideProps) => {
-    const { emblaRef, scrollNext, scrollPrev } = useControllSlide({
+    const { emblaRef, scrollNext, scrollPrev, selectedIndex, scrollSnaps } = useControllSlide({
         align: 'start',
         slidesToScroll: 'auto',
-        dragFree: true,
     });
 
     return (
@@ -127,7 +126,7 @@ const EventSlide = ({ title }: EventSlideProps) => {
                             key={index}
                             className="embla__slide flex-[0_0_75%] md:flex-[0_0_35%] lg:flex-[0_0_20%] min-w-2"
                         >
-                            <Card className="overflow-hidden border-none shadow-none bg-transparent hover:bg-primary/10 transition-colors">
+                            <Card className="hover:cursor-pointer hover:bg-primary/5 overflow-hidden shadow-none transition-colors">
                                 {/* Banner */}
                                 <div className="relative w-full h-52 -my-6">
                                     <Image
@@ -176,7 +175,10 @@ const EventSlide = ({ title }: EventSlideProps) => {
                 </div>
             </div>
 
-            <NavButtonSlide scrollNext={scrollNext} scrollPrev={scrollPrev} />
+            <NavButtonSlide
+                scrollNext={scrollNext}
+                scrollPrev={scrollPrev}
+            />
         </div>
     );
 };

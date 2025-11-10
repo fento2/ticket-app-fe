@@ -73,6 +73,13 @@ export const Filter = () => {
         router.replace(`?${encodeURI(params.toString())}`, { scroll: false });
     }
 
+    const formatNumber = (value: string) => {
+        // Hilangkan semua karakter non-digit
+        const numericValue = value.replace(/\D/g, "")
+        // Format jadi ribuan dengan titik
+        return numericValue.replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+    }
+
     const categoryAccordion: AccordionFIlterType = {
         data: category,
         Icon: TagsIcon,
@@ -85,15 +92,13 @@ export const Filter = () => {
     }
 
     return (
-        <Card className="max-w-[300px]  m-2">
+        <Card className="max-w-[300px] shadow-none ml-1">
 
             <CardHeader className="text-2xl flex items-center justify-center -tracking-wide font-extrabold">
-                <p>
+                <p className="">
                     Filter Event
                 </p>
             </CardHeader>
-
-
 
             <CardContent className="space-y-4">
 
@@ -165,6 +170,7 @@ export const Filter = () => {
                                     </>}
                             </span>
                         </AccordionTrigger>
+
                         <AccordionContent>
                             <Calendar
                                 mode="range"
@@ -173,6 +179,7 @@ export const Filter = () => {
                                 captionLayout="dropdown"
                                 selected={selectedWaktu}
                                 onSelect={setSelectedWaktu}
+
                             />
                         </AccordionContent>
 
@@ -185,17 +192,17 @@ export const Filter = () => {
                     <h3 className="font-semibold mb-2">Rentang Harga (Rp)</h3>
                     <div className="flex items-center gap-2">
                         <Input
-                            type="number"
+                            type="text"
                             placeholder="Min"
                             value={minPrice}
-                            onChange={(e) => setMinPrice(e.target.value)}
+                            onChange={(e) => setMinPrice(() => formatNumber(e.target.value))}
                         />
                         <span>-</span>
                         <Input
-                            type="number"
+                            type="text"
                             placeholder="Max"
                             value={maxPrice}
-                            onChange={(e) => setMaxPrice(e.target.value)}
+                            onChange={(e) => setMaxPrice(() => formatNumber(e.target.value))}
                         />
                     </div>
                 </div>

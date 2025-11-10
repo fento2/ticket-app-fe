@@ -3,22 +3,34 @@ import { Button } from "../ui/button"
 type NavButtonSlideProps = {
     scrollPrev: () => void
     scrollNext: () => void
+    selectedIndex?: number
+    scrollSnaps?: number
 }
-const NavButtonSlide = ({ scrollNext, scrollPrev }: NavButtonSlideProps) => {
+/**
+ * 
+ * @param selectedIndex for hide button so is you dont wanna hide just igore
+ * @param scrollSnaps for length index scroll
+ * @returns 
+ */
+const NavButtonSlide = ({ scrollNext, scrollPrev, selectedIndex, scrollSnaps = 0 }: NavButtonSlideProps) => {
+
+    const showPrev = selectedIndex !== undefined ? selectedIndex > 0 : true;
+    const showNext = selectedIndex !== undefined ? selectedIndex < scrollSnaps - 1 : true;
+
     return (
         <>
             {/* Prev Button */}
-            <Button
+            {showPrev && <Button
                 onClick={scrollPrev}
                 size="icon"
                 variant={'outline'}
                 className={`absolute -left-5 top-1/2 -translate-y-1/2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300`}
             >
                 <ChevronLeft />
-            </Button>
+            </Button>}
 
             {/* Next Button */}
-            <Button
+            {showNext && <Button
                 onClick={scrollNext}
                 size="icon"
                 variant="outline"
@@ -26,6 +38,7 @@ const NavButtonSlide = ({ scrollNext, scrollPrev }: NavButtonSlideProps) => {
             >
                 <ChevronRight />
             </Button>
+            }
         </>
     )
 }

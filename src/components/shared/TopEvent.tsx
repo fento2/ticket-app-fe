@@ -24,9 +24,9 @@ const TopEvent = () => {
   ];
 
   return (
-    <div className="bg-sidebar-primary py-8">
+    <div className="bg-secondary py-8 my-4">
       <div className="max-w-7xl mx-auto px-8">
-        <h2 className="text-3xl font-bold text-white mb-6 tracking-wide">
+        <h2 className="text-3xl font-bold mb-6 tracking-wide">
           Top Event
         </h2>
 
@@ -36,7 +36,7 @@ const TopEvent = () => {
               key={event.top}
               className="flex items-center gap-4 min-w-[350px]"
             >
-              <p className="text-6xl md:text-7xl font-extrabold text-white opacity-80">
+              <p className="text-6xl md:text-7xl font-extrabold opacity-80">
                 {event.top}
               </p>
 

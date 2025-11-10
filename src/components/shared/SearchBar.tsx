@@ -7,20 +7,17 @@ const SearchBar = () => {
     <>
       <div>
         {/* Search Bar - full width */}
-        <div className="relative flex-1 mr-8 max-w-3xl">
+        <div className="flex w-full">
           <Input
             type="text"
             placeholder="Cari event..."
-            className="pr-12 focus-visible:ring-0 focus-visible:ring-offset-0 focus:bg-white focus:text-black placeholder:text-gray-300 bg-accent"
+            className="rounded-l-full rounded-r-none bg-accent focus-visible:ring-0 focus-visible:ring-offset-0 focus:bg-white focus:text-black placeholder:text-gray-300"
           />
           <Button
-            type="button"
             variant={"default"}
-            size="icon"
-            className="absolute right-0 top-1/2 -translate-y-1/2
-              rounded-l-none px-5 rounded-r-sm bg-blue-900"
+            className="rounded-l-none px-5 rounded-r-full"
           >
-            <Search size={18} className="text-white" />
+            <Search className="text-white" size={18} />
           </Button>
         </div>
       </div>

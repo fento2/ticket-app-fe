@@ -1,9 +1,9 @@
 import { Ticket } from "lucide-react";
 import Link from "next/link";
-
 import SignInModal from "./SignIn";
 import { Button } from "../ui/button";
 import SearchBar from "./SearchBar";
+import Image from "next/image";
 
 export const Topbar = () => {
   const menu = [
@@ -14,14 +14,14 @@ export const Topbar = () => {
   ];
 
   return (
-    <div className="bg-sidebar-primary/80 text-sm h-8 flex items-center">
-      <div className="max-w-screen-3xl mx-auto px-6 w-full flex justify-end">
-        <div className="flex items-center gap-6 font-medium text-white">
+    <div className="bg-white/50 text-sm flex items-center">
+      <div className="w-full flex justify-end">
+        <div className="flex items-center gap-3 font-medium tracking-wider px-2 py-0.5">
           {menu.map((item, index) => (
             <Link
               key={index}
               href={item.link}
-              className="transition-colors"
+              className="hover:underline"
             >
               {item.name}
             </Link>
@@ -34,38 +34,43 @@ export const Topbar = () => {
 
 export const Navbar = () => {
   return (
-    <nav className="bg-sidebar-primary w-full h-20 flex items-center sticky top-0 z-50 shadow-md">
-      <div className="max-w-screen-3xl mx-auto px-6 w-full flex items-center justify-between">
+    <nav className="backdrop-blur-3xl w-full flex items-center sticky top-0 z-50 py-1.5">
+      <div className="max-w-screen-3xl mx-auto px-4 w-full flex items-center justify-between">
         {/* Logo + Search Bar container */}
-        <div className="flex items-center gap-3 flex-1">
+        <div className="flex items-center justify-between w-full">
           {/* Logo */}
-          <div className="flex items-center space-x-2 text-white">
-            <Ticket className="w-7 h-7" />
-            <span className="font-extrabold text-2xl tracking-wide">
-              EventTix
-            </span>
+          <div className="flex items-center">
+            <div className="relative w-12 h-9">
+              <Image
+                src={'/logo2.png'}
+                alt={'logo'}
+                fill
+                className="object-cover"
+              />
+            </div>
+            <h1 className="font-extrabold">Event Tix</h1>
           </div>
 
-          {/* Divider */}
-          <div className="bg-accent w-px h-12 mx-2" />
-          <div className="flex-1 mr-8 max-w-3xl">
-            <SearchBar />
+          {/* Search bar di tengah */}
+          <div className="flex-1 px-4">
+            <div className="max-w-2xl">
+              <SearchBar />
+            </div>
+          </div>
+
+
+
+          <div className="flex items-center gap-1">
+            <SignInModal />
+
+            <Link href="/sign-up">
+              <Button variant="outline" className="text-white rounded-full font-bold bg-primary border-white hover:bg-primary/90 hover:text-white">
+                Sign Up
+              </Button>
+            </Link>
           </div>
         </div>
 
-        {/* Actions */}
-        <div className="flex items-center gap-4 shrink-0">
-          <SignInModal />
-          <div className="bg-accent w-px h-12" />
-          <Link href="/sign-up">
-            <Button
-              variant="ghost"
-              className="px-6 border shadow-sm font-medium bg-accent"
-            >
-              Sign Up
-            </Button>
-          </Link>
-        </div>
       </div>
     </nav>
   );

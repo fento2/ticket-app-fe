@@ -13,16 +13,16 @@ const ShowNavbarAndFooter = ({ children }: ShowNavbarAndFooterProps) => {
     const shouldHide = hideOn.some((v) => pathname.startsWith(v))
     if (shouldHide) return children
     return (
-        <>
-            <Topbar />
+        <main className="bg-accent">
+            {/* <Topbar /> */}
             <Navbar />
 
-            <main >
-                {children}
-            </main>
+
+            {children}
+
 
             <Footer />
-        </>
+        </main>
     )
 
 }

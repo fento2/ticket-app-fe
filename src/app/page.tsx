@@ -1,5 +1,5 @@
 import Category from "@/components/shared/Category";
-import DivParentPage from "@/components/shared/DivParentPage";
+import SectionParentPage from "@/components/shared/SectionParentPage";
 import BannerSlide from "@/components/shared/BannerSlide";
 import TopEvent from "@/components/shared/TopEvent";
 import EventSlide from "@/components/shared/EventSlide";
@@ -7,23 +7,25 @@ import EventSlide from "@/components/shared/EventSlide";
 export default function Home() {
   return (
     <section>
-      <DivParentPage className="my-8 space-y-12">
+      <SectionParentPage className="space-y-6">
 
         <BannerSlide />
 
         <EventSlide title="Featured Events" />
 
-      </DivParentPage>
+        <EventSlide title="New Event" />
+
+      </SectionParentPage>
 
       <TopEvent />
 
-      <DivParentPage className="my-8 space-y-12">
+      <SectionParentPage className=" space-y-6">
 
         <Category />
 
         <EventSlide title="Populer di" />
 
-      </DivParentPage>
+      </SectionParentPage>
     </section>
   );
 }

@@ -63,8 +63,8 @@ const Category = () => {
 
   return (
     <div>
-      <Card className="relative group w-full">
-        <CardHeader className="text-xl font-bold">Category</CardHeader>
+      <Card className="relative group w-full shadow-none border-none">
+        <CardHeader className="text-xl font-bold tracking-wider">Category Event</CardHeader>
 
         {/* embla wrapper */}
         <div className="overflow-hidden embla" ref={emblaRef}>
@@ -76,7 +76,7 @@ const Category = () => {
                 className="embla__slide flex-[0_0_auto] w-[8rem] h-32 rounded-lg overflow-hidden shadow-md cursor-pointer"
               >
                 <div
-                  className="w-full h-full bg-cover bg-center relative flex items-center justify-center hover:scale-150 transition-transform"
+                  className="w-full h-full bg-cover bg-center relative flex items-center justify-center hover:scale-105 transition-transform"
                   style={{
                     backgroundImage: `url(${value.banner})`,
                   }}
