@@ -1,9 +1,17 @@
 "use client"
 import NavButtonSlide, { PaginationButtonSlide } from "./NavButtonSlide"
 import { useControllSlide } from "@/features/event/slide/useControllSlide"
+import Autoplay from "embla-carousel-autoplay";
+
 
 const BannerSlide = () => {
-    const { emblaApi, emblaRef, scrollNext, scrollPrev, scrollSnaps, selectedIndex } = useControllSlide({ loop: true })
+    const { emblaApi, emblaRef, scrollNext, scrollPrev, scrollSnaps, selectedIndex } = useControllSlide({ loop: true }, [
+        Autoplay({
+            delay: 4000,
+            stopOnInteraction: false,
+            stopOnMouseEnter: true,
+        }),
+    ])
 
     return (
         <div className="relative group w-full">

@@ -24,8 +24,8 @@ export default function SignInModal() {
       {/* Tombol buka modal */}
       <DialogTrigger asChild>
         <Button
-          variant="ghost"
-          className="px-6 border text-white shadow-sm font-medium transition-all hover:bg-sky-50"
+          variant="default"
+          className="text-primary rounded-full font-bold transition-all bg-white border-primary border hover:bg-stone-100"
         >
           Sign In
         </Button>

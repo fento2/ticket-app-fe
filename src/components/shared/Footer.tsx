@@ -4,11 +4,11 @@ import { Instagram, Twitter, Linkedin } from "lucide-react"; // lucide icons
 
 export const Footer = () => {
     return (
-        <footer className="bg-sidebar-primary py-10 mt-16 text-white">
+        <footer className="border-t py-10 mt-16 bg-white ">
             <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8">
 
                 {/* Brand / Info */}
-                <div>
+                <div className="">
                     <h2 className="text-2xl font-bold">Even Tix</h2>
                     <p className="mt-2 text-sm">
                         Platform terbaik untuk menemukan dan mengelola event favoritmu.
