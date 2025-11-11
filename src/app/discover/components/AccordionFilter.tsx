@@ -1,67 +1,59 @@
-'use clinet'
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
-import { Button } from "@/components/ui/button"
-import { AccordionFilterProps, useAccordionFilter } from "@/features/event/discover/useAccordionFilter"
-import React from "react"
-import BadgeActive from "./BadgeActive"
-import { Separator } from "@/components/ui/separator"
+'use client';
 
-const AccordionFIlter = ({ accordionItemData, children }: AccordionFilterProps & { children?: React.ReactNode }) => {
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { Separator } from "@/components/ui/separator";
+import BadgeActive from "./BadgeActive";
+import React from "react";
+import { LucideProps } from "lucide-react";
 
-    const {
-        addSelected,
-        countSelect,
-        delateAllSelectedByLabel,
-        accordionData
-    } = useAccordionFilter({ accordionItemData })
+export type FnMultipleParams = <ParamsTypes extends unknown[]>(...args: ParamsTypes) => void;
+
+export type AccordionFilterItem = {
+    label: string;
+    Icon: React.ComponentType<LucideProps>;
+    /** Optional: content (ex calendar, range slider, dll) */
+    toolTipContent: string | React.ReactElement | undefined
+    isActive: boolean;
+    countSelected: (label: string) => string | number
+    setReset: FnMultipleParams;
+    renderContent: React.ReactElement;
+};
+
+export type AccordionFilterProps = {
+    accordionItemData: AccordionFilterItem[];
+};
+
+const AccordionFilter = ({
+    accordionItemData,
+}: AccordionFilterProps) => {
 
     return (
-
-        <Accordion type="single" collapsible={true} defaultValue={accordionData[0].label}>
+        <Accordion type="single" collapsible defaultValue={accordionItemData[0].label}>
             <Separator />
             {accordionItemData.map((v, i) => (
-                <AccordionItem key={i} value={v.label} >
-                    <div className="mb-2">
-                        <AccordionTrigger className="hover:no-underline items-center" size={30}>
-                            <span className="flex gap-2 items-center text-lg font-semibold tracking-widest">
-                                <v.Icon size={20} className="text-primary" />
-                                {v.label}
-                                {countSelect(v.label) > 0 &&
-                                    <>
-                                        <BadgeActive
-                                            contentActive={() => accordionData.find((a) => a.label === v.label)?.data.join(", ")}
-                                            countSelected={() => countSelect(v.label)}
-                                            resetBadge={() => delateAllSelectedByLabel(v.label)}
-                                        />
-                                    </>
-                                }
-                            </span>
-                        </AccordionTrigger>
-                    </div>
+                <AccordionItem key={i} value={v.label}>
+                    <AccordionTrigger className="hover:no-underline items-center py-2" size={27}>
+                        <span className="flex gap-2 items-center text-lg font-semibold tracking-widest">
+                            <v.Icon size={20} className="text-primary" />
+                            {v.label}
+
+                            {v.isActive && (
+                                <BadgeActive
+                                    toolTipContent={v.toolTipContent}
+                                    countSelected={v.countSelected(v.label)}
+                                    resetBadge={() => v.setReset(v.label)}
+                                />
+                            )}
+                        </span>
+                    </AccordionTrigger>
 
                     <AccordionContent>
-                        <div className="grid grid-cols-2 gap-2">
-                            {v.data.map((vm, i) => (
-
-                                <Button
-                                    key={i}
-                                    variant={"outline"}
-                                    className={`cursor-pointer text-sm font-medium tracking-wider rounded-full
-                               ${accordionData.some((vs) => vs.data.includes(vm)) ? 'bg-primary hover:bg-primary hover:text-white text-white' : ''}`}
-                                    onClick={() => addSelected(vm, v.label)}
-
-                                >
-                                    {vm}
-                                </Button>
-
-                            ))}
-                        </div>
+                        {v.renderContent}
                     </AccordionContent>
                 </AccordionItem>
             ))}
-            {children}
-        </Accordion >
-    )
-}
+        </Accordion>
+    );
+};
 
-export default AccordionFIlter
+export default AccordionFilter;

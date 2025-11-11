@@ -1,20 +1,23 @@
 "use client"
 
-import { Card, CardContent, CardHeader } from "@/components/ui/card"
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import React, { useState } from "react"
-import { MapIcon, Minus, SparklesIcon, TagsIcon, TimerIcon } from "lucide-react"
-import AccordionFIlter from "./AccordionFilter"
+import { FilterIcon, MapIcon, Minus, RotateCw, SparklesIcon, TagsIcon, TimerIcon } from "lucide-react"
+import AccordionFIlter, { AccordionFilterItem, } from "./AccordionFilter"
 import { useRouter, useSearchParams } from "next/navigation"
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
 import BadgeActive from "./BadgeActive"
 import { Calendar } from "@/components/ui/calendar"
-import { AccordionFIlterType } from "@/features/event/discover/useAccordionFilter"
 import { AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import type { DateRange } from "react-day-picker"
+import { Button } from "@/components/ui/button"
+import { useFilterStore } from "@/lib/zustand/filterStore"
+
+
 
 export const Filter = () => {
-    const category = [
+    const listCategory = [
         "Music",
         "Tech",
         "Art",
@@ -52,6 +55,11 @@ export const Filter = () => {
     const [maxPrice, setMaxPrice] = useState("")
     const router = useRouter()
     const searchParam = useSearchParams()
+    const categories = useFilterStore((state) => state.value.categories);
+    const setCategories = useFilterStore((state) => state.action.setCategories)
+    const resetFilter = useFilterStore((state) => state.action.resetFilter)
+    const eventTypes = useFilterStore((state) => state.value.eventTypes)
+    const setEventTypes = useFilterStore((state) => state.action.setEventTypes)
 
     const handleCheck = (
         value: string,
@@ -80,21 +88,71 @@ export const Filter = () => {
         return numericValue.replace(/\B(?=(\d{3})+(?!\d))/g, ".")
     }
 
-    const categoryAccordion: AccordionFIlterType = {
-        data: category,
+    const categoryAccordion: AccordionFilterItem = {
         Icon: TagsIcon,
-        label: "Category"
+        label: "Category",
+        countSelected: () => categories.length,
+        setReset: () => resetFilter('categories'),
+        isActive: categories.length > 0,
+        toolTipContent: categories.join(' ,'),
+        renderContent: (
+            <div className="grid grid-cols-2 gap-2">
+                {listCategory.map((vm, i) => (
+                    <Button
+                        key={i}
+                        size="sm"
+                        variant="outline"
+                        className={`cursor-pointer text-sm font-medium tracking-wider rounded-full
+                        ${categories.includes(vm) ? 'bg-primary hover:bg-primary hover:text-white text-white' : ''}`}
+                        onClick={() => {
+                            if (categories.includes(vm)) {
+                                setCategories(categories.filter((v) => v !== vm))
+                            } else {
+                                setCategories([...categories, vm])
+                            }
+                        }}
+                    >
+                        {vm}
+                    </Button>
+                ))}
+            </div>
+        ),
     }
-    const typeEventAccordion: AccordionFIlterType = {
-        data: tipeEvent,
+    const eventTypeAccordion: AccordionFilterItem = {
         Icon: SparklesIcon,
         label: "Type Event",
+        countSelected: () => eventTypes.length,
+        setReset: () => resetFilter('eventTypes'),
+        isActive: eventTypes.length > 0,
+        toolTipContent: eventTypes.join(' ,'),
+        renderContent: (
+            <div className="grid grid-cols-2 gap-2">
+                {tipeEvent.map((vm, i) => (
+                    <Button
+                        key={i}
+                        size="sm"
+                        variant="outline"
+                        className={`cursor-pointer text-sm font-medium tracking-wider rounded-full
+                        ${eventTypes.includes(vm) ? 'bg-primary hover:bg-primary hover:text-white text-white' : ''}`}
+                        onClick={() => {
+                            if (eventTypes.includes(vm)) {
+                                setEventTypes(eventTypes.filter((v) => v !== vm))
+                            } else {
+                                setEventTypes([...eventTypes, vm])
+                            }
+                        }}
+                    >
+                        {vm}
+                    </Button>
+                ))}
+            </div>
+        )
     }
 
     return (
-        <Card className="max-w-[300px] shadow-none ml-1">
+        <Card className="max-w-[300px] shadow-none border-none">
 
-            <CardHeader className="text-2xl flex items-center justify-center -tracking-wide font-extrabold">
+            <CardHeader className="text-2xl flex items-center justify-center tracking-wide font-bold">
                 <p className="">
                     Filter Event
                 </p>
@@ -106,86 +164,84 @@ export const Filter = () => {
                     accordionItemData={
                         [
                             categoryAccordion,
-                            typeEventAccordion
+                            eventTypeAccordion
                         ]
                     }
-                >
-                    <AccordionItem value="lokasi">
-                        <Command className="">
-                            <AccordionTrigger className="hover:no-underline items-center" size={30}>
-                                <span className="flex gap-2 items-center text-lg font-semibold tracking-widest">
-                                    <MapIcon className="text-primary" />
-                                    Lokasi
-                                    {selectedLokasi.length > 0 &&
-                                        <>
-                                            <BadgeActive
-                                                countSelected={() => selectedLokasi.length}
-                                                contentActive={() => selectedLokasi.join(', ')}
-                                                resetBadge={() => setSelectedLokasi([])}
-                                            />
-                                        </>
-                                    }
-                                </span>
-                            </AccordionTrigger>
-                            <AccordionContent>
-                                <div className="border rounded-lg">
-                                    <CommandInput />
-                                    <CommandList className="scroll-thin max-h-56" >
-                                        <CommandEmpty>No results found.</CommandEmpty>
-                                        <CommandGroup >
-                                            {lokasi.map((v, i) => (
-                                                <CommandItem key={i}
-                                                    value={v}
-                                                    onSelect={() => handleCheck(v, selectedLokasi, setSelectedLokasi)}
-                                                    className={`${selectedLokasi.includes(v) ? 'bg-primary text-white data-[selected=true]:text-white data-[selected=true]:bg-primary' : ''}`}
-                                                >
-                                                    {v}
-                                                </CommandItem>
-                                            ))}
-                                        </CommandGroup>
-                                    </CommandList>
-                                </div>
-                            </AccordionContent>
-                        </Command>
-                    </AccordionItem>
-
-                    <AccordionItem value="waktu">
-                        <AccordionTrigger className="hover:no-underline items-center" size={30}>
+                />
+                {/* <AccordionItem value="lokasi">
+                    <Command className="">
+                        <AccordionTrigger className="hover:no-underline items-center py-2" size={27}>
                             <span className="flex gap-2 items-center text-lg font-semibold tracking-widest">
-                                <TimerIcon className="text-primary" />
-                                Waktu
-                                {selectedWaktu &&
+                                <MapIcon className="text-primary" />
+                                Lokasi
+                                {selectedLokasi.length > 0 &&
                                     <>
                                         <BadgeActive
-                                            countSelected={() => 1}
-                                            contentActive={() => (
-                                                <div className="flex items-center gap-1.5">
-                                                    {selectedWaktu.from?.toDateString()}
-                                                    <Minus size={10} />
-                                                    {selectedWaktu.to?.toDateString()}
-                                                </div>
-                                            )}
-                                            resetBadge={() => setSelectedWaktu(undefined)}
+                                            countSelected={selectedLokasi.length}
+                                            toolTipContent={selectedLokasi.join(', ')}
+                                            resetBadge={() => setSelectedLokasi([])}
                                         />
-                                    </>}
+                                    </>
+                                }
                             </span>
                         </AccordionTrigger>
-
                         <AccordionContent>
-                            <Calendar
-                                mode="range"
-                                numberOfMonths={1}
-                                className="border rounded-lg"
-                                captionLayout="dropdown"
-                                selected={selectedWaktu}
-                                onSelect={setSelectedWaktu}
-
-                            />
+                            <div className="border rounded-lg">
+                                <CommandInput />
+                                <CommandList className="scroll-thin max-h-56" >
+                                    <CommandEmpty>No results found.</CommandEmpty>
+                                    <CommandGroup >
+                                        {lokasi.map((v, i) => (
+                                            <CommandItem key={i}
+                                                value={v}
+                                                onSelect={() => handleCheck(v, selectedLokasi, setSelectedLokasi)}
+                                                className={`${selectedLokasi.includes(v) ? 'bg-primary text-white data-[selected=true]:text-white data-[selected=true]:bg-primary' : ''}`}
+                                            >
+                                                {v}
+                                            </CommandItem>
+                                        ))}
+                                    </CommandGroup>
+                                </CommandList>
+                            </div>
                         </AccordionContent>
+                    </Command>
+                </AccordionItem>
 
-                    </AccordionItem>
-                </AccordionFIlter>
+                <AccordionItem value="waktu">
+                    <AccordionTrigger className="hover:no-underline items-center py-2" size={27}>
+                        <span className="flex gap-2 items-center text-lg font-semibold tracking-widest">
+                            <TimerIcon className="text-primary" />
+                            Waktu
+                            {selectedWaktu &&
+                                <>
+                                    <BadgeActive
+                                        countSelected={1}
+                                        toolTipContent={
+                                            <div className="flex items-center gap-1.5">
+                                                {selectedWaktu.from?.toDateString()}
+                                                <Minus size={10} />
+                                                {selectedWaktu.to?.toDateString()}
+                                            </div>
+                                        }
+                                        resetBadge={() => setSelectedWaktu(undefined)}
+                                    />
+                                </>}
+                        </span>
+                    </AccordionTrigger>
 
+                    <AccordionContent>
+                        <Calendar
+                            mode="range"
+                            numberOfMonths={1}
+                            className="border rounded-lg"
+                            captionLayout="dropdown"
+                            selected={selectedWaktu}
+                            onSelect={setSelectedWaktu}
+
+                        />
+                    </AccordionContent>
+
+                </AccordionItem> */}
 
                 {/* Harga */}
                 <div>
@@ -207,6 +263,14 @@ export const Filter = () => {
                     </div>
                 </div>
             </CardContent>
+            <CardFooter className="flex justify-between  gap-4">
+                <Button variant={'destructive'} className="rounded-full">
+                    <RotateCw /> Reset
+                </Button>
+                <Button className="rounded-full">
+                    <FilterIcon />Apply
+                </Button>
+            </CardFooter>
         </Card >
     )
 }

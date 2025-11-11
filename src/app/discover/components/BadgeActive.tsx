@@ -1,12 +1,12 @@
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { X } from "lucide-react"
 
-type BadgeActiveProps = {
-    countSelected: () => number | string | React.ReactElement
-    contentActive: () => string | React.ReactElement | undefined
+export type BadgeActiveProps = {
+    countSelected: number | string | React.ReactElement
+    toolTipContent: string | React.ReactElement | undefined
     resetBadge: () => void
 }
-const BadgeActive = ({ contentActive, countSelected, resetBadge }: BadgeActiveProps) => {
+const BadgeActive = ({ toolTipContent: contentActive, countSelected, resetBadge }: BadgeActiveProps) => {
     return (
         <div
             className="bg-primary h-6 flex items-center justify-center gap-2 px-3 rounded-full"
@@ -14,11 +14,11 @@ const BadgeActive = ({ contentActive, countSelected, resetBadge }: BadgeActivePr
             <Tooltip>
                 <TooltipTrigger asChild>
                     <span className="text-white text-xs">
-                        {countSelected()}
+                        {countSelected}
                     </span>
                 </TooltipTrigger>
                 <TooltipContent>
-                    {contentActive()}
+                    {contentActive}
                 </TooltipContent>
             </Tooltip>
 
