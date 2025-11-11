@@ -1,95 +1,97 @@
-"use client";
-import { LucideProps } from "lucide-react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+// "use client";
 
-export type AccordionFIlterType = {
-  label: string;
-  Icon: React.ComponentType<LucideProps>;
-  data: string[];
-};
+// import { LucideProps } from "lucide-react";
+// import { useRouter, useSearchParams } from "next/navigation";
+// import { useEffect, useState } from "react";
+// import { useShallow } from "zustand/react/shallow";
 
-export type AccordionFilterProps = {
-  accordionItemData: AccordionFIlterType[];
-};
+// export type AccordionFIlterType = {
+//   label: string;
+//   Icon: React.ComponentType<LucideProps>;
+//   data: string[];
+// };
 
-const useAccordionFilter = ({ accordionItemData }: AccordionFilterProps) => {
-  const [accordionData, setAccordionData] = useState(
-    accordionItemData.map((v) => ({ ...v, data: [] as string[] }))
-  );
+// export type AccordionFilterProps = {
+//   accordionItemData: AccordionFIlterType[];
+// };
 
-  const searchParam = useSearchParams();
-  const router = useRouter();
+// const useAccordionFilter = ({ accordionItemData }: AccordionFilterProps) => {
+//   const [accordionData, setAccordionData] = useState(
+//     accordionItemData.map((v) => ({ ...v, data: [] as string[] }))
+//   );
 
-  const addSelected = (value: string, label: string) => {
-    setAccordionData((prev) =>
-      prev.map((vm) => {
-        if (vm.label === label) {
-          return {
-            ...vm,
-            data: vm.data.includes(value)
-              ? vm.data.filter((vf) => vf !== value)
-              : [...vm.data, value],
-          };
-        }
-        return vm;
-      })
-    );
+//   const searchParam = useSearchParams();
+//   const router = useRouter();
 
-    const params = new URLSearchParams(searchParam.toString());
-    if (params.getAll(label).includes(value)) {
-      const updated = params.getAll(label).filter((v) => v !== value);
-      params.delete(label);
-      updated.forEach((v) => params.append(label, v));
-    } else {
-      params.append(label, value);
-    }
+//   const addSelected = (value: string, label: string) => {
+//     setAccordionData((prev) =>
+//       prev.map((vm) => {
+//         if (vm.label === label) {
+//           return {
+//             ...vm,
+//             data: vm.data.includes(value)
+//               ? vm.data.filter((vf) => vf !== value)
+//               : [...vm.data, value],
+//           };
+//         }
+//         return vm;
+//       })
+//     );
 
-    router.replace(`?${encodeURI(params.toString())}`, { scroll: false });
-  };
+//     const params = new URLSearchParams(searchParam.toString());
+//     if (params.getAll(label).includes(value)) {
+//       const updated = params.getAll(label).filter((v) => v !== value);
+//       params.delete(label);
+//       updated.forEach((v) => params.append(label, v));
+//     } else {
+//       params.append(label, value);
+//     }
 
-  const countSelect = (label: string) => {
-    const accorItem = accordionData.find((vf) => vf.label === label);
-    return accorItem?.data.length || 0;
-  };
+//     router.replace(`?${encodeURI(params.toString())}`, { scroll: false });
+//   };
 
-  const delateAllSelectedByLabel = (label: string) => {
-    setAccordionData((prev) =>
-      prev.map((vm) => {
-        if (vm.label === label) {
-          return {
-            ...vm,
-            data: [],
-          };
-        }
-        return vm;
-      })
-    );
+//   const countSelect = (label: string) => {
+//     const accorItem = accordionData.find((vf) => vf.label === label);
+//     return accorItem?.data.length || 0;
+//   };
 
-    const params = new URLSearchParams(searchParam.toString());
-    params.delete(label);
+//   const delateAllSelectedByLabel = (label: string) => {
+//     setAccordionData((prev) =>
+//       prev.map((vm) => {
+//         if (vm.label === label) {
+//           return {
+//             ...vm,
+//             data: [],
+//           };
+//         }
+//         return vm;
+//       })
+//     );
 
-    router.replace(`?${encodeURI(params.toString())}`, { scroll: false });
-  };
+//     const params = new URLSearchParams(searchParam.toString());
+//     params.delete(label);
 
-  useEffect(() => {
-    setAccordionData((prev) =>
-      prev.map((vm) => {
-        const optionData = searchParam.getAll(vm.label);
-        return {
-          ...vm,
-          data: optionData.length ? optionData : [],
-        };
-      })
-    );
-  }, [searchParam]);
+//     router.replace(`?${encodeURI(params.toString())}`, { scroll: false });
+//   };
 
-  return {
-    addSelected,
-    countSelect,
-    delateAllSelectedByLabel,
-    accordionData,
-  };
-};
+//   useEffect(() => {
+//     setAccordionData((prev) =>
+//       prev.map((vm) => {
+//         const optionData = searchParam.getAll(vm.label);
+//         return {
+//           ...vm,
+//           data: optionData.length ? optionData : [],
+//         };
+//       })
+//     );
+//   }, [searchParam]);
 
-export { useAccordionFilter };
+//   return {
+//     addSelected,
+//     countSelect,
+//     delateAllSelectedByLabel,
+//     accordionData,
+//   };
+// };
+
+// export { useAccordionFilter };

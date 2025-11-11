@@ -2,6 +2,7 @@
 import NavButtonSlide, { PaginationButtonSlide } from "./NavButtonSlide"
 import { useControllSlide } from "@/features/event/slide/useControllSlide"
 import Autoplay from "embla-carousel-autoplay";
+import Image from "next/image";
 
 
 const BannerSlide = () => {
@@ -18,9 +19,31 @@ const BannerSlide = () => {
 
             <div className="overflow-hidden rounded-2xl" ref={emblaRef}>
                 <div className="flex">
-                    <div className="flex-[0_0_100%] bg-red-500 h-72 flex items-center justify-center text-white text-2xl">Slide 1</div>
-                    <div className="flex-[0_0_100%] bg-blue-500 h-72 flex items-center justify-center text-white text-2xl">Slide 2</div>
-                    <div className="flex-[0_0_100%] bg-green-500 h-72 flex items-center justify-center text-white text-2xl">Slide 3</div>
+                    <div className="flex-[0_0_100%] h-80 relative">
+                        <Image
+                            src="https://images.pexels.com/photos/30455566/pexels-photo-30455566.jpeg"
+                            alt="Slide 1"
+                            fill
+                            className="object-cover"
+                        />
+                    </div>
+                    <div className="flex-[0_0_100%] h-80 relative">
+                        <Image
+                            src="https://images.pexels.com/photos/30488841/pexels-photo-30488841.jpeg"
+                            alt="Slide 2"
+                            fill
+                            className="object-cover"
+                        />
+                    </div>
+                    <div className="flex-[0_0_100%] h-80 relative">
+                        <Image
+                            src="https://images.pexels.com/photos/30251830/pexels-photo-30251830.jpeg"
+                            alt="Slide 3"
+                            fill
+                            className="object-cover"
+                        />
+                    </div>
+
                 </div>
             </div>
 

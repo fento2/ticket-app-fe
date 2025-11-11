@@ -1,8 +1,9 @@
+import SectionParentPage from "@/components/shared/SectionParentPage"
 import { Filter } from "./components/Filter"
 
 const Discover = () => {
     return (
-        <div>
+        <SectionParentPage>
             <div className="flex gap-3" >
                 <div className="">
                     <Filter />
@@ -14,7 +15,7 @@ const Discover = () => {
             <div className="h-[200px]">
 
             </div>
-        </div>
+        </SectionParentPage>
     )
 }
 export default Discover

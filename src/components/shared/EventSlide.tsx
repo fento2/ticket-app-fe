@@ -126,9 +126,9 @@ const EventSlide = ({ title }: EventSlideProps) => {
                             key={index}
                             className="embla__slide flex-[0_0_75%] md:flex-[0_0_35%] lg:flex-[0_0_20%] min-w-2"
                         >
-                            <Card className="hover:cursor-pointer hover:bg-primary/5 overflow-hidden shadow-none transition-colors">
+                            <Card className={`hover:cursor-pointer overflow-hidden shadow-none transition-shadow hover:shadow-2xl`}>
                                 {/* Banner */}
-                                <div className="relative w-full h-52 -my-6">
+                                <div className={`relative w-full h-52 -my-6`}>
                                     <Image
                                         src={event.image}
                                         alt={event.title}
