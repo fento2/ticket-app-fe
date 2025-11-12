@@ -4,6 +4,7 @@ import "./globals.css";
 import { ToastProvider } from "@/components/toast-1";
 import ShowNavbarAndFooter from "@/components/shared/ShowNavbarAndFooter";
 import QueryProvider from "@/providers/QueryProvider";
+import { ThemeProvider as NextThemesProvider, ThemeProvider } from "next-themes"
 
 
 const geistSans = Geist({
@@ -27,15 +28,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
+
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       ><QueryProvider>
-          <ShowNavbarAndFooter>
-            <ToastProvider>
-              {children}
-            </ToastProvider>
-          </ShowNavbarAndFooter>
+          <ThemeProvider
+            attribute={'class'}
+            enableSystem
+            defaultTheme="system"
+          >
+            <ShowNavbarAndFooter>
+              <ToastProvider>
+                {children}
+              </ToastProvider>
+            </ShowNavbarAndFooter>
+          </ThemeProvider>
         </QueryProvider>
       </body>
     </html>

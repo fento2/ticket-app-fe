@@ -13,44 +13,75 @@ import { AccordionContent, AccordionItem, AccordionTrigger } from "@/components/
 import type { DateRange } from "react-day-picker"
 import { Button } from "@/components/ui/button"
 import { useFilterStore } from "@/lib/zustand/filterStore"
+import { ActionType } from "@/types/shared"
 
 
+const listCategory = [
+    "Music",
+    "Tech",
+    "Art",
+    "Sport",
+    "Education",
+    "Business",
+    "Others",
+]
+
+const listLokasi = [
+    "Jakarta",
+    "Bandung",
+    "Surabaya",
+    "Medan",
+    "Bali",
+    "Yogyakarta",
+    "Makassar",
+]
+
+const listEventTypes = [
+    "Online",
+    "Offline",
+    "Hybrid",
+    "Online",
+    "Offline",
+    "Hybrid",
+    "Online",
+    "Offline",
+    "Hybrid"
+];
+
+type RenderGridCol2Props = {
+    listOption: string[]
+    state: string[]
+    setState: (value: string) => void
+}
+const RenderGridCol2 = ({ listOption, setState, state }: RenderGridCol2Props) => {
+    return (
+        <div className="grid grid-cols-2 gap-2">
+            {listOption.map((vm, i) => (
+                <Button
+                    key={i}
+                    size="sm"
+                    variant={`${state.includes(vm) ? 'default' : 'secondary'}`}
+                    className={`cursor-pointer font-medium tracking-wider rounded-full`}
+                    onClick={() => setState(vm)}
+                >
+                    {vm}
+                </Button>
+            ))}
+        </div>
+    )
+}
+
+type KeyFilter = 'categories' | 'eventTypes' | 'locations' | 'timeRange';
+
+const keyFilterArray: KeyFilter[] = ['categories', 'eventTypes', 'locations', 'timeRange'];
+
+type ApplyFilterItem<ValueType> = {
+    key: KeyFilter,
+    value: ValueType
+}
+type ApplyFilterArr<ValueType> = ApplyFilterItem<ValueType>[]
 
 export const Filter = () => {
-    const listCategory = [
-        "Music",
-        "Tech",
-        "Art",
-        "Sport",
-        "Education",
-        "Business",
-        "Others",
-    ]
-
-    const lokasi = [
-        "Jakarta",
-        "Bandung",
-        "Surabaya",
-        "Medan",
-        "Bali",
-        "Yogyakarta",
-        "Makassar",
-    ]
-
-    const tipeEvent = [
-        "Online",
-        "Offline",
-        "Hybrid",
-        "Online",
-        "Offline",
-        "Hybrid",
-        "Online",
-        "Offline",
-        "Hybrid"
-    ];
-
-    const [selectedLokasi, setSelectedLokasi] = useState<string[]>([])
-    const [selectedWaktu, setSelectedWaktu] = useState<DateRange | undefined>()
     const [minPrice, setMinPrice] = useState("")
     const [maxPrice, setMaxPrice] = useState("")
     const router = useRouter()
@@ -60,25 +91,33 @@ export const Filter = () => {
     const resetFilter = useFilterStore((state) => state.action.resetFilter)
     const eventTypes = useFilterStore((state) => state.value.eventTypes)
     const setEventTypes = useFilterStore((state) => state.action.setEventTypes)
+    const locations = useFilterStore((state) => state.value.locations)
+    const setLocations = useFilterStore((state) => state.action.setLocations)
+    const timeRange = useFilterStore((state) => state.value.timeRange)
+    const setTimeRange = useFilterStore((state) => state.action.setTimeRange)
 
-    const handleCheck = (
-        value: string,
-        list: string[],
-        setter: React.Dispatch<React.SetStateAction<string[]>>
+
+
+
+
+    const handleCheck = <StateType,>(
+        value: StateType,
+        state: StateType[],
+        setState: ActionType<StateType[]>
     ) => {
-        if (list.includes(value)) setter(list.filter((v) => v !== value))
-        else setter([...list, value])
+        if (state.includes(value)) setState(state.filter((v) => v !== value))
+        else setState([...state, value])
 
-        const params = new URLSearchParams(searchParam.toString());
-        if (params.getAll('lokasi').includes(value)) {
-            const updated = params.getAll('lokasi').filter((v) => v !== value);
-            params.delete('lokasi');
-            updated.forEach((v) => params.append('lokasi', v));
-        } else {
-            params.append('lokasi', value);
-        }
+        // const params = new URLSearchParams(searchParam.toString());
+        // if (params.getAll('lokasi').includes(value)) {
+        //     const updated = params.getAll('lokasi').filter((v) => v !== value);
+        //     params.delete('lokasi');
+        //     updated.forEach((v) => params.append('lokasi', v));
+        // } else {
+        //     params.append('lokasi', value);
+        // }
 
-        router.replace(`?${encodeURI(params.toString())}`, { scroll: false });
+        // router.replace(`?${encodeURI(params.toString())}`, { scroll: false });
     }
 
     const formatNumber = (value: string) => {
@@ -88,162 +127,146 @@ export const Filter = () => {
         return numericValue.replace(/\B(?=(\d{3})+(?!\d))/g, ".")
     }
 
+    const applyFilter = () => {
+        const params = new URLSearchParams();
+
+        // Ambil dari state
+        const categories = useFilterStore.getState().value.categories;
+        const eventTypes = useFilterStore.getState().value.eventTypes;
+        const locations = useFilterStore.getState().value.locations;
+        const timeRange = useFilterStore.getState().value.timeRange;
+
+        // Tambahin ke URLSearchParams kalo ada isinya
+        if (categories.length) params.set("categories", categories.join(","));
+        if (eventTypes.length) params.set("eventTypes", eventTypes.join(","));
+        if (locations.length) params.set("locations", locations.join(","));
+        if (timeRange) {
+            if (timeRange.from) params.set("from", timeRange.from.toISOString());
+            if (timeRange.to) params.set("to", timeRange.to.toISOString());
+        }
+
+        // Misal redirect ke halaman baru atau update URL
+        const url = `${params.toString()}`;
+        console.log(url);
+    };
+
+    const getValue = (key: KeyFilter) => {
+        const params = new URLSearchParams(searchParam.toString());
+        return params.getAll
+    }
+
     const categoryAccordion: AccordionFilterItem = {
         Icon: TagsIcon,
         label: "Category",
         countSelected: () => categories.length,
         setReset: () => resetFilter('categories'),
         isActive: categories.length > 0,
-        toolTipContent: categories.join(' ,'),
-        renderContent: (
-            <div className="grid grid-cols-2 gap-2">
-                {listCategory.map((vm, i) => (
-                    <Button
-                        key={i}
-                        size="sm"
-                        variant="outline"
-                        className={`cursor-pointer text-sm font-medium tracking-wider rounded-full
-                        ${categories.includes(vm) ? 'bg-primary hover:bg-primary hover:text-white text-white' : ''}`}
-                        onClick={() => {
-                            if (categories.includes(vm)) {
-                                setCategories(categories.filter((v) => v !== vm))
-                            } else {
-                                setCategories([...categories, vm])
-                            }
-                        }}
-                    >
-                        {vm}
-                    </Button>
-                ))}
-            </div>
-        ),
+        toolTipContent: categories.join(', '),
+        renderContent: () => (
+            <RenderGridCol2
+                listOption={listCategory}
+                setState={(value) => handleCheck(value, categories, setCategories)}
+                state={categories}
+            />
+        )
     }
+
     const eventTypeAccordion: AccordionFilterItem = {
         Icon: SparklesIcon,
-        label: "Type Event",
+        label: "Event Type",
         countSelected: () => eventTypes.length,
         setReset: () => resetFilter('eventTypes'),
         isActive: eventTypes.length > 0,
-        toolTipContent: eventTypes.join(' ,'),
-        renderContent: (
-            <div className="grid grid-cols-2 gap-2">
-                {tipeEvent.map((vm, i) => (
-                    <Button
-                        key={i}
-                        size="sm"
-                        variant="outline"
-                        className={`cursor-pointer text-sm font-medium tracking-wider rounded-full
-                        ${eventTypes.includes(vm) ? 'bg-primary hover:bg-primary hover:text-white text-white' : ''}`}
-                        onClick={() => {
-                            if (eventTypes.includes(vm)) {
-                                setEventTypes(eventTypes.filter((v) => v !== vm))
-                            } else {
-                                setEventTypes([...eventTypes, vm])
-                            }
-                        }}
-                    >
-                        {vm}
-                    </Button>
-                ))}
+        toolTipContent: eventTypes.join(', '),
+        renderContent: () => (
+            <RenderGridCol2
+                listOption={listEventTypes}
+                setState={(value) => handleCheck(value, eventTypes, setEventTypes)}
+                state={eventTypes}
+            />
+        )
+    }
+
+    const locationAccordion: AccordionFilterItem = {
+        countSelected: () => locations.length,
+        Icon: MapIcon,
+        isActive: locations.length > 0,
+        label: "Location",
+        setReset: () => resetFilter('locations'),
+        toolTipContent: locations.join(', '),
+        renderContent: () => (
+            <Command >
+                <div className="border rounded-2xl rounded-b-none border-b focus-within:border focus-within:border-primary">
+                    <CommandInput className="outline-none" clasNameDiv="border-none" />
+                </div>
+                <div className="border border-t-0 rounded-b-2xl">
+                    <CommandList className="scroll-thin max-h-56">
+                        <CommandEmpty>No results found.</CommandEmpty>
+                        <CommandGroup>
+                            {listLokasi.map((v, i) => (
+                                <CommandItem key={i}
+                                    value={v}
+                                    onSelect={() => handleCheck(v, locations, setLocations)}
+                                    className={`my-0.5 rounded-full ${locations.includes(v) ? 'bg-primary text-white data-[selected=true]:text-white data-[selected=true]:bg-primary' : ''}`}
+                                >
+                                    {v}
+                                </CommandItem>
+                            ))}
+                        </CommandGroup>
+                    </CommandList>
+                </div>
+            </Command>
+        )
+
+    }
+
+    const timeRangeAccordion: AccordionFilterItem = {
+        countSelected: () => <TimerIcon size={13.5} />,
+        Icon: TimerIcon,
+        isActive: !!timeRange,
+        label: 'Time Range',
+        setReset: () => resetFilter('timeRange'),
+        toolTipContent: (
+            <div className="flex items-center gap-1.5">
+                {timeRange?.from?.toDateString()}
+                <Minus size={10} />
+                {timeRange?.to?.toDateString()}
             </div>
+        ),
+        renderContent: () => (
+            <Calendar
+                mode="range"
+                numberOfMonths={1}
+                className="border rounded-xl w-full"
+                captionLayout="dropdown"
+                selected={timeRange}
+                onSelect={setTimeRange}
+
+            />
         )
     }
 
     return (
-        <Card className="max-w-[300px] shadow-none border-none">
-
-            <CardHeader className="text-2xl flex items-center justify-center tracking-wide font-bold">
-                <p className="">
-                    Filter Event
-                </p>
-            </CardHeader>
+        <Card className="w-[310px] shadow-none border py-4">
 
             <CardContent className="space-y-4">
+                <div className="flex items-center justify-center tracking-wide font-bold">
+                    <p className="text-lg">
+                        Filter Event
+                    </p>
+                </div>
 
                 <AccordionFIlter
                     accordionItemData={
                         [
                             categoryAccordion,
-                            eventTypeAccordion
+                            eventTypeAccordion,
+                            locationAccordion,
+                            timeRangeAccordion,
                         ]
                     }
                 />
-                {/* <AccordionItem value="lokasi">
-                    <Command className="">
-                        <AccordionTrigger className="hover:no-underline items-center py-2" size={27}>
-                            <span className="flex gap-2 items-center text-lg font-semibold tracking-widest">
-                                <MapIcon className="text-primary" />
-                                Lokasi
-                                {selectedLokasi.length > 0 &&
-                                    <>
-                                        <BadgeActive
-                                            countSelected={selectedLokasi.length}
-                                            toolTipContent={selectedLokasi.join(', ')}
-                                            resetBadge={() => setSelectedLokasi([])}
-                                        />
-                                    </>
-                                }
-                            </span>
-                        </AccordionTrigger>
-                        <AccordionContent>
-                            <div className="border rounded-lg">
-                                <CommandInput />
-                                <CommandList className="scroll-thin max-h-56" >
-                                    <CommandEmpty>No results found.</CommandEmpty>
-                                    <CommandGroup >
-                                        {lokasi.map((v, i) => (
-                                            <CommandItem key={i}
-                                                value={v}
-                                                onSelect={() => handleCheck(v, selectedLokasi, setSelectedLokasi)}
-                                                className={`${selectedLokasi.includes(v) ? 'bg-primary text-white data-[selected=true]:text-white data-[selected=true]:bg-primary' : ''}`}
-                                            >
-                                                {v}
-                                            </CommandItem>
-                                        ))}
-                                    </CommandGroup>
-                                </CommandList>
-                            </div>
-                        </AccordionContent>
-                    </Command>
-                </AccordionItem>
-
-                <AccordionItem value="waktu">
-                    <AccordionTrigger className="hover:no-underline items-center py-2" size={27}>
-                        <span className="flex gap-2 items-center text-lg font-semibold tracking-widest">
-                            <TimerIcon className="text-primary" />
-                            Waktu
-                            {selectedWaktu &&
-                                <>
-                                    <BadgeActive
-                                        countSelected={1}
-                                        toolTipContent={
-                                            <div className="flex items-center gap-1.5">
-                                                {selectedWaktu.from?.toDateString()}
-                                                <Minus size={10} />
-                                                {selectedWaktu.to?.toDateString()}
-                                            </div>
-                                        }
-                                        resetBadge={() => setSelectedWaktu(undefined)}
-                                    />
-                                </>}
-                        </span>
-                    </AccordionTrigger>
-
-                    <AccordionContent>
-                        <Calendar
-                            mode="range"
-                            numberOfMonths={1}
-                            className="border rounded-lg"
-                            captionLayout="dropdown"
-                            selected={selectedWaktu}
-                            onSelect={setSelectedWaktu}
-
-                        />
-                    </AccordionContent>
-
-                </AccordionItem> */}
-
-                {/* Harga */}
+                {/* Harga
                 <div>
                     <h3 className="font-semibold mb-2">Rentang Harga (Rp)</h3>
                     <div className="flex items-center gap-2">
@@ -261,16 +284,17 @@ export const Filter = () => {
                             onChange={(e) => setMaxPrice(() => formatNumber(e.target.value))}
                         />
                     </div>
+                </div> */}
+                <div className="flex justify-between">
+                    <Button variant={'destructive'} className="rounded-full">
+                        <RotateCw /> Reset
+                    </Button>
+                    <Button className="rounded-full"
+                        variant={'default'}>
+                        <FilterIcon />Apply
+                    </Button>
                 </div>
             </CardContent>
-            <CardFooter className="flex justify-between  gap-4">
-                <Button variant={'destructive'} className="rounded-full">
-                    <RotateCw /> Reset
-                </Button>
-                <Button className="rounded-full">
-                    <FilterIcon />Apply
-                </Button>
-            </CardFooter>
         </Card >
     )
 }

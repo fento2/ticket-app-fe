@@ -25,7 +25,7 @@ type ActionFilter = {
   resetFilter: (key?: KeyValueFilter) => void;
 };
 
-type UseFilterStoreType = {
+type FilterStoreType = {
   value: ValueFilter;
   action: ActionFilter;
 };
@@ -40,7 +40,7 @@ const initialState: ValueFilter = {
 };
 /**helper for setActionState */
 const setActionFn: FnSeStateActionType<
-  UseFilterStoreType,
+  FilterStoreType,
   ValueFilter,
   KeyValueFilter
 > = (key, set) => (params) =>
@@ -54,7 +54,7 @@ const setActionFn: FnSeStateActionType<
     };
   });
 
-const state: StateCreator<UseFilterStoreType> = (set) => ({
+const state: StateCreator<FilterStoreType> = (set) => ({
   value: initialState,
   action: {
     setCategories: setActionFn("categories", set),
@@ -84,4 +84,4 @@ const state: StateCreator<UseFilterStoreType> = (set) => ({
   },
 });
 
-export const useFilterStore = create<UseFilterStoreType>(state);
+export const useFilterStore = create<FilterStoreType>(state);
