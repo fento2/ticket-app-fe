@@ -4,7 +4,7 @@ import { Navbar, Topbar } from "./Navbar";
 import { Footer } from "./Footer";
 
 interface ShowNavbarAndFooterProps {
-    children: React.ReactNode;
+    children: React.ReactElement;
 }
 
 const ShowNavbarAndFooter = ({ children }: ShowNavbarAndFooterProps) => {
@@ -13,8 +13,8 @@ const ShowNavbarAndFooter = ({ children }: ShowNavbarAndFooterProps) => {
     const shouldHide = hideOn.some((v) => pathname.startsWith(v))
     if (shouldHide) return children
     return (
-        <main className="bg-accent">
-            {/* <Topbar /> */}
+        <main>
+            <Topbar />
             <Navbar />
 
 

@@ -8,12 +8,9 @@ const Discover = () => {
                 <div className="">
                     <Filter />
                 </div>
-                <div className="overflow-y-auto h-[2000px] flex-1 bg-amber-300">
+                <div className="overflow-y-auto  flex-1 bg-amber-300">
                     {/* konten panjang */}
                 </div>
-            </div>
-            <div className="h-[200px]">
-
             </div>
         </SectionParentPage>
     )

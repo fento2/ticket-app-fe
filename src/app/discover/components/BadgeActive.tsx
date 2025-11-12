@@ -9,11 +9,11 @@ export type BadgeActiveProps = {
 const BadgeActive = ({ toolTipContent: contentActive, countSelected, resetBadge }: BadgeActiveProps) => {
     return (
         <div
-            className="bg-primary h-6 flex items-center justify-center gap-2 px-3 rounded-full"
+            className="bg-accent h-6 flex items-center justify-center gap-2 px-3 rounded-full"
         >
-            <Tooltip>
+            <Tooltip delayDuration={500}>
                 <TooltipTrigger asChild>
-                    <span className="text-white text-xs">
+                    <span className="text-xs">
                         {countSelected}
                     </span>
                 </TooltipTrigger>

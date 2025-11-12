@@ -25,9 +25,9 @@ export default function SignInModal() {
       <DialogTrigger asChild>
         <Button
           variant="default"
-          className="text-primary rounded-full font-bold transition-all bg-white border-primary border hover:bg-stone-100"
+          className="font-bold"
         >
-          Sign In
+          Sign Up
         </Button>
       </DialogTrigger>
 

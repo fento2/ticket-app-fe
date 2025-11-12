@@ -63,7 +63,7 @@ const Category = () => {
 
   return (
     <div>
-      <Card className="relative group w-full shadow-none">
+      <Card className="relative group w-full shadow-none border-none">
         <CardHeader className="text-xl font-bold tracking-wider">Category Event</CardHeader>
 
         {/* embla wrapper */}

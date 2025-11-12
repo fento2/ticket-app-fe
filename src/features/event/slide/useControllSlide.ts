@@ -1,3 +1,4 @@
+"use client";
 import useEmblaCarousel from "embla-carousel-react";
 import type { EmblaOptionsType, EmblaPluginType } from "embla-carousel";
 import { useCallback, useEffect, useState } from "react";
