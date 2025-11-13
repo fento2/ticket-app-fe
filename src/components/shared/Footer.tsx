@@ -107,7 +107,7 @@ export const Footer = () => {
                                     value={v.theme}
                                     onClick={() => setTheme(v.theme)}
                                     aria-label={`Theme ${v.theme}`}
-                                    className="p-2 !rounded-full"
+                                    className="p-2 rounded-full"
                                 >
                                     <v.Icon />
                                 </ToggleGroupItem>
