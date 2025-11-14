@@ -4,7 +4,7 @@ import "./globals.css";
 import { ToastProvider } from "@/components/toast-1";
 import ShowNavbarAndFooter from "@/components/shared/ShowNavbarAndFooter";
 import QueryProvider from "@/providers/QueryProvider";
-import { ThemeProvider as NextThemesProvider, ThemeProvider } from "next-themes"
+import { ThemeProvider } from "next-themes"
 
 
 const geistSans = Geist({

@@ -5,11 +5,11 @@ import { useCallback, useEffect, useState } from "react";
 
 const useControllSlide = (
   props?: EmblaOptionsType,
-  plugin?: EmblaPluginType[]
+  plugins?: EmblaPluginType[]
 ) => {
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
   const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
-  const [emblaRef, emblaApi] = useEmblaCarousel({ ...props }, plugin);
+  const [emblaRef, emblaApi] = useEmblaCarousel({ ...props }, plugins);
 
   const scrollPrev = useCallback(() => {
     if (!emblaApi) return;
